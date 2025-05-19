@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@/types/*": ["src/types/*"],
+      "@config/*": ["src/config/*"],
+      "@shared/*": ["src/shared/*"],
+      "@dto/*": ["src/dtos/*"],
+      "@enums":["src/enums/index.ts"],
+      "@helpers/*": ["src/helpers/*"],
+      "@modules/*": ["src/modules/*"],
+      "@/actions/*": ["src/actions/*"],
+      "@database/*": ["src/database/*"],
+      "@entities/*": ["src/entities/*"],
+      "@decorators/*": ["src/decorators/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+    }
+  }
+}
