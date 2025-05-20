@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [23]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: 'https://npm.pkg.github.com'
+        scope: '@kemuko-org'
+
+    - name: Install pnpm
+      run: |
+        npm install -g pnpm
+        pnpm --version
+
+    # - name: Install dependencies
+    #   run: pnpm install --frozen-lockfile
+    #   env:
+    #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    # - name: Run lint
+    #   run: pnpm run lint
+
+    # - name: Run tests
+    #   run: pnpm run test:cov
+
+    # - name: Build the project
+    #   run: pnpm run build
+
+    # - name: Upload coverage reports
+    #   uses: actions/upload-pages-artifact@v3
+    #   with:
+    #     name: coverage
+    #     path: coverage/
+
+    # - name: Post a success message
+    #   run: echo "CI passed!"
