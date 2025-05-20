@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CoursesService } from './services/course.service';
 import { Category } from '@entities/category.entity';
 import { Course } from '@entities/course.entity';
 import { Module as CourseModules } from '@entities/module.entity';
@@ -41,8 +40,8 @@ import {
   WishListModelAction,
   NotificationModelAction,
 } from '../actions/model-actions';
-import { CategoriesService } from './services/categories.service';
 import controllers from './base.controller';
+import { services } from './base.service';
 
 @Module({
   imports: [
@@ -69,8 +68,7 @@ import controllers from './base.controller';
     ]),
   ],
   providers: [
-    CoursesService,
-    CategoriesService,
+    ...services,
     CategoryModelAction,
     CourseModelAction,
     ModuleModelAction,
@@ -94,4 +92,4 @@ import controllers from './base.controller';
   controllers: [...controllers],
   exports: [],
 })
-export class CourseModule { }
+export class CourseModule {}
