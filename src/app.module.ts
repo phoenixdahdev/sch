@@ -11,7 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CourseModule } from './course/course.module';
+import { CourseModule } from './courses/course.module';
 
 @Module({
   imports: [

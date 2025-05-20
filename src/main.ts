@@ -35,8 +35,8 @@ async function bootstrap() {
   app.use(helmet());
 
   const config = new DocumentBuilder()
-    .setTitle('KEMUKO General Service API')
-    .addServer('/general')
+    .setTitle('KEMUKO Courses Service API')
+    .addServer('/courses')
     .addServer('/')
     .setDescription(
       'Public and unprotected endpoints for authentication and user management on the KEMUKO Education Platform',
