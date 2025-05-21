@@ -30,7 +30,7 @@ export class CategoriesController {
       filterRecordOptions: {},
       paginationPayload: {
         page: parseInt(pagination?.page) || 1,
-        limit: parseInt(pagination?.limit) || 2,
+        limit: parseInt(pagination?.limit) || 10,
       },
     };
     return this.categoriesService.findAll(listOptions);

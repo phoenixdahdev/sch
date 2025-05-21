@@ -24,11 +24,12 @@ export class CoursesService {
         is_published: true,
       },
       paginationPayload: listOptions.paginationPayload,
-      relations: ['category'],
+      relations: { category: true },
     });
+
     return {
       data: { courses: payload },
-      message: 'Courses have been retrived successfully',
+      message: 'Courses have been retrieved successfully',
       meta: paginationMeta,
     };
   }
@@ -113,7 +114,7 @@ export class CoursesService {
       },
       paginationPayload,
       order,
-      relations: ['category'],
+      relations: { category: true },
     });
     return {
       data: { courses: payload },
