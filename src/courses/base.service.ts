@@ -5,6 +5,9 @@ import { ModulesService } from './services/modules.service';
 import { LessonsService } from './services/lessons.service';
 import { CartService } from './services/cart.service';
 import { UserCoursesService } from './services/user-courses.service';
+import { ReviewsService } from './services/reviews.service';
+import { PaymentIntent } from '@entities/payment_intent.entity';
+import { CertificateService } from './services/certificate.service';
 
 export const services: Provider[] = [
   CoursesService,
@@ -12,5 +15,8 @@ export const services: Provider[] = [
   ModulesService,
   LessonsService,
   CartService,
-  UserCoursesService
+  UserCoursesService,
+  ReviewsService,
+  PaymentIntent,
+  CertificateService,
 ];

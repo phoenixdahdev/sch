@@ -1,7 +1,14 @@
-import { Controller, Get, Param, UseGuards, Request } from '@nestjs/common';
+import {
+  AuthGuard,
+  CurrentUser,
+  PaginationValidator,
+  User,
+} from '@kemuko-org/shared-utils';
+import { Controller, Get, Param, UseGuards, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CertificateService } from '../services/certificate.service';
-import { AuthGuard } from '../guards/auth.guard';
+import FindRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/find-record-generic';
+import { Certificate } from '@entities/certificate.entity';
 
 @ApiTags('certificates')
 @Controller('certificates')
@@ -11,22 +18,41 @@ export class CertificateController {
   @Get()
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get all certificates for current user' })
-  async findAll(@Request() req) {
-    return this.certificateService.findAll(req.user.id);
+  async findAll(
+    @CurrentUser() user: User,
+    @Query() pagination?: PaginationValidator,
+  ) {
+    const findOption: FindRecordGeneric<Partial<Certificate>> = {
+      findOptions: {
+        user_id: user.id,
+      },
+      paginationPayload: {
+        page: parseInt(pagination?.page) || 1,
+        limit: parseInt(pagination?.limit) || 10,
+      },
+      order: { issued_at: 'DESC' },
+      transactionOptions: {
+        useTransaction: false,
+      },
+    };
+    return this.certificateService.findAll(findOption);
   }
 
   @Get(':id')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get certificate by id' })
-  async findOne(@Param('id') id: string, @Request() req) {
-    return this.certificateService.findOne(id, req.user.id);
+  async findOne(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.certificateService.findOne(id, user.id);
   }
 
   @Get('course/:courseId')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get certificate by course id' })
-  async findByCourse(@Param('courseId') courseId: string, @Request() req) {
-    return this.certificateService.findByCourse(courseId, req.user.id);
+  async findByCourse(
+    @Param('courseId') courseId: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.certificateService.findByCourse(courseId, user.id);
   }
 
   @Get('verify/:code')
@@ -38,7 +64,7 @@ export class CertificateController {
   @Get(':id/download')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Download certificate' })
-  async download(@Param('id') id: string, @Request() req) {
-    return this.certificateService.download(id, req.user.id);
+  async download(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.certificateService.download(id, user.id);
   }
 }

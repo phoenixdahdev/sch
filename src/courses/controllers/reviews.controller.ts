@@ -7,13 +7,17 @@ import {
   Param,
   Body,
   UseGuards,
-  Request,
   Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ReviewsService } from '../services/reviews.service';
-import { CreateReviewDto, UpdateReviewDto } from '../dtos/reviews.dto';
-import { AuthGuard } from '../guards/auth.guard';
+import { CreateReviewDto, UpdateReviewDto } from '@dto/reviews.dto';
+import {
+  AuthGuard,
+  CurrentUser,
+  PaginationValidator,
+  User,
+} from '@kemuko-org/shared-utils';
 
 @ApiTags('reviews')
 @Controller('reviews')
@@ -22,15 +26,39 @@ export class ReviewsController {
 
   @Get('course/:courseId')
   @ApiOperation({ summary: 'Get all reviews for a course' })
-  async findAll(@Param('courseId') courseId: string, @Query() query) {
-    return this.reviewsService.findAll(courseId, query);
+  async findAll(
+    @Param('courseId') courseId: string,
+    @Query() pagination?: PaginationValidator,
+  ) {
+    const listOptions = {
+      filterRecordOptions: {
+        course_id: courseId,
+      },
+      paginationPayload: {
+        page: parseInt(pagination?.page) || 1,
+        limit: parseInt(pagination?.limit) || 10,
+      },
+    };
+    return this.reviewsService.findAll(listOptions);
   }
 
   @Get('user')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get all reviews by current user' })
-  async findByUser(@Request() req, @Query() query) {
-    return this.reviewsService.findByUser(req.user.id, query);
+  async findByUser(
+    @CurrentUser() user: User,
+    @Query() pagination?: PaginationValidator,
+  ) {
+    const listOptions = {
+      filterRecordOptions: {
+        user_id: user.id,
+      },
+      paginationPayload: {
+        page: parseInt(pagination?.page) || 1,
+        limit: parseInt(pagination?.limit) || 10,
+      },
+    };
+    return this.reviewsService.findAll(listOptions);
   }
 
   @Get(':id')
@@ -45,9 +73,9 @@ export class ReviewsController {
   async create(
     @Param('courseId') courseId: string,
     @Body() createReviewDto: CreateReviewDto,
-    @Request() req,
+    @CurrentUser() user: User,
   ) {
-    return this.reviewsService.create(courseId, createReviewDto, req.user.id);
+    return this.reviewsService.create(courseId, createReviewDto, user.id);
   }
 
   @Put(':id')
@@ -56,15 +84,15 @@ export class ReviewsController {
   async update(
     @Param('id') id: string,
     @Body() updateReviewDto: UpdateReviewDto,
-    @Request() req,
+    @CurrentUser() user: User,
   ) {
-    return this.reviewsService.update(id, updateReviewDto, req.user.id);
+    return this.reviewsService.update(id, updateReviewDto, user.id);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Delete a review' })
-  async remove(@Param('id') id: string, @Request() req) {
-    return this.reviewsService.remove(id, req.user.id);
+  async remove(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.reviewsService.remove(id, user.id);
   }
 }

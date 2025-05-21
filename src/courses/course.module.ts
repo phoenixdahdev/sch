@@ -43,7 +43,7 @@ import {
 import controllers from './base.controller';
 import { services } from './base.service';
 import { MulterModule } from '@nestjs/platform-express';
-// import { EventEmitterModule } from '@nestjs/event-emitter';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -71,7 +71,7 @@ import { MulterModule } from '@nestjs/platform-express';
     MulterModule.register({
       dest: './uploads',
     }),
-    // EventEmitterModule.forRoot(),
+    EventEmitterModule.forRoot(),
   ],
   providers: [
     ...services,
@@ -96,6 +96,6 @@ import { MulterModule } from '@nestjs/platform-express';
     NotificationModelAction,
   ],
   controllers: [...controllers],
-  exports: [],
+  exports: [...services],
 })
 export class CourseModule {}

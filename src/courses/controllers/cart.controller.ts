@@ -10,11 +10,10 @@ import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CartService } from '../services/cart.service';
 import { AuthGuard, CurrentUser, User } from '@kemuko-org/shared-utils';
 
-
 @ApiTags('cart')
 @Controller('cart')
 export class CartController {
-  constructor(private readonly cartService: CartService) { }
+  constructor(private readonly cartService: CartService) {}
 
   @Get()
   @UseGuards(AuthGuard)
@@ -26,14 +25,20 @@ export class CartController {
   @Post('add/:courseId')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Add course to cart' })
-  async addToCart(@Param('courseId') courseId: string, @CurrentUser() user: User) {
+  async addToCart(
+    @Param('courseId') courseId: string,
+    @CurrentUser() user: User,
+  ) {
     return this.cartService.addToCart(user.id, courseId);
   }
 
   @Delete('remove/:courseId')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Remove course from cart' })
-  async removeFromCart(@Param('courseId') courseId: string, @CurrentUser() user: User) {
+  async removeFromCart(
+    @Param('courseId') courseId: string,
+    @CurrentUser() user: User,
+  ) {
     return this.cartService.removeFromCart(user.id, courseId);
   }
 
