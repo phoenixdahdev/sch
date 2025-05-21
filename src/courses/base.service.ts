@@ -8,6 +8,8 @@ import { UserCoursesService } from './services/user-courses.service';
 import { ReviewsService } from './services/reviews.service';
 import { PaymentIntent } from '@entities/payment_intent.entity';
 import { CertificateService } from './services/certificate.service';
+import { WishlistService } from './services/wishlist.service';
+import { NotificationService } from '@kemuko-org/shared-utils';
 
 export const services: Provider[] = [
   CoursesService,
@@ -19,4 +21,6 @@ export const services: Provider[] = [
   ReviewsService,
   PaymentIntent,
   CertificateService,
+  WishlistService,
+  NotificationService,
 ];

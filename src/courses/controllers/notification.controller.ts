@@ -5,11 +5,18 @@ import {
   Delete,
   Param,
   UseGuards,
-  Request,
+  Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { NotificationService } from '../services/notification.service';
-import { AuthGuard } from '../guards/auth.guard';
+import {
+  AuthGuard,
+  CurrentUser,
+  PaginationValidator,
+  User,
+} from '@kemuko-org/shared-utils';
+import FindRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/find-record-generic';
+import { Notification } from '@entities/notification.entity';
 
 @ApiTags('notifications')
 @Controller('notifications')
@@ -18,50 +25,70 @@ export class NotificationController {
 
   @Get()
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get all notifications for current user' })
-  async findAll(@Request() req) {
-    return this.notificationService.findAll(req.user.id);
-  }
+  @ApiOperation({
+    summary: 'Get notifications for current user (all or unread)',
+  })
+  @ApiQuery({
+    name: 'unread',
+    required: false,
+    type: Boolean,
+    description: 'Set to true to fetch only unread notifications',
+  })
+  async findAll(
+    @CurrentUser() user: User,
+    @Query() pagination?: PaginationValidator,
+    @Query('unread') unread?: string,
+  ) {
+    const findOption: FindRecordGeneric<Partial<Notification>> = {
+      findOptions: {
+        user_id: user.id,
+        ...(unread === 'true' ? { is_read: false } : {}),
+      },
+      paginationPayload: {
+        page: parseInt(pagination?.page) || 1,
+        limit: parseInt(pagination?.limit) || 10,
+      },
+      order: { issued_at: 'DESC' },
+      transactionOptions: {
+        useTransaction: false,
+      },
+    };
 
-  @Get('unread')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get unread notifications for current user' })
-  async findUnread(@Request() req) {
-    return this.notificationService.findUnread(req.user.id);
+    return this.notificationService.findAll(findOption);
   }
 
   @Get(':id')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get notification by id' })
-  async findOne(@Param('id') id: string, @Request() req) {
-    return this.notificationService.findOne(id, req.user.id);
+  async findOne(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.notificationService.findOne(id, user.id);
   }
 
   @Put(':id/mark-read')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Mark notification as read' })
-  async markRead(@Param('id') id: string, @Request() req) {
-    return this.notificationService.markRead(id, req.user.id);
+  async markRead(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.notificationService.markRead(id, user.id);
   }
 
   @Put('mark-all-read')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Mark all notifications as read' })
-  async markAllRead(@Request() req) {
-    return this.notificationService.markAllRead(req.user.id);
+  async markAllRead(@CurrentUser() user: User) {
+    return this.notificationService.markAllRead(user.id);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Delete notification' })
-  async remove(@Param('id') id: string, @Request() req) {
-    return this.notificationService.remove(id, req.user.id);
+  async remove(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.notificationService.remove(id, user.id);
   }
 
   @Delete('clear')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Clear all notifications' })
-  async clearAll(@Request() req) {
-    return this.notificationService.clearAll(req.user.id);
+  async clearAll(@CurrentUser() user: User) {
+    return this.notificationService.clearAll(user.id);
   }
 }

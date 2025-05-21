@@ -5,11 +5,10 @@ import {
   Delete,
   Param,
   UseGuards,
-  Request,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { WishlistService } from '../services/wishlist.service';
-import { AuthGuard } from '../guards/auth.guard';
+import { AuthGuard, CurrentUser, User } from '@kemuko-org/shared-utils';
 
 @ApiTags('wishlist')
 @Controller('wishlist')
@@ -19,15 +18,18 @@ export class WishlistController {
   @Get()
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get user wishlist' })
-  async getWishlist(@Request() req) {
-    return this.wishlistService.getWishlist(req.user.id);
+  async getWishlist(@CurrentUser() user: User) {
+    return this.wishlistService.getWishlist(user.id);
   }
 
   @Post('add/:courseId')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Add course to wishlist' })
-  async addToWishlist(@Param('courseId') courseId: string, @Request() req) {
-    return this.wishlistService.addToWishlist(req.user.id, courseId);
+  async addToWishlist(
+    @Param('courseId') courseId: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.wishlistService.addToWishlist(user.id, courseId);
   }
 
   @Delete('remove/:courseId')
@@ -35,22 +37,25 @@ export class WishlistController {
   @ApiOperation({ summary: 'Remove course from wishlist' })
   async removeFromWishlist(
     @Param('courseId') courseId: string,
-    @Request() req,
+    @CurrentUser() user: User,
   ) {
-    return this.wishlistService.removeFromWishlist(req.user.id, courseId);
+    return this.wishlistService.removeFromWishlist(user.id, courseId);
   }
 
   @Delete('clear')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Clear wishlist' })
-  async clearWishlist(@Request() req) {
-    return this.wishlistService.clearWishlist(req.user.id);
+  async clearWishlist(@CurrentUser() user: User) {
+    return this.wishlistService.clearWishlist(user.id);
   }
 
   @Post('move-to-cart/:courseId')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Move course from wishlist to cart' })
-  async moveToCart(@Param('courseId') courseId: string, @Request() req) {
-    return this.wishlistService.moveToCart(req.user.id, courseId);
+  async moveToCart(
+    @Param('courseId') courseId: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.wishlistService.moveToCart(user.id, courseId);
   }
 }

@@ -8,6 +8,8 @@ import { UserCoursesController } from './controllers/user-courses.controller';
 import { ReviewsController } from './controllers/reviews.controller';
 import { PaymentController } from './controllers/payment.controller';
 import { CertificateController } from './controllers/certificate.controller';
+import { WishlistController } from './controllers/wishlist.controller';
+import { NotificationController } from './controllers/notification.controller';
 
 const controllers: Type<any>[] = [
   CategoriesController,
@@ -19,6 +21,8 @@ const controllers: Type<any>[] = [
   ReviewsController,
   PaymentController,
   CertificateController,
+  WishlistController,
+  NotificationController
 ];
 
 export default controllers;
