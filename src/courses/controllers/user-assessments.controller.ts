@@ -1,22 +1,19 @@
-/* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
+import { Controller, Get, Post, Param, Body, UseGuards } from '@nestjs/common';
 import {
-  Controller,
-  Get,
-  Post,
-  Param,
-  Body,
-  UseGuards,
-  Request,
-} from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiBearerAuth,
+  ApiBody,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { SubmitAssessmentDto } from '@dto/user-assessments.dto';
+import { AuthGuard, CurrentUser, User } from '@kemuko-org/shared-utils';
 import { UserAssessmentsService } from '../services/user-assessments.service';
-import { SubmitAssessmentDto } from '../dtos/user-assessments.dto';
-import { AuthGuard } from '../guards/auth.guard';
 
-@ApiTags('user-assessments')
+@ApiTags('User Assessments')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('user-assessments')
 export class UserAssessmentsController {
   constructor(
@@ -24,59 +21,73 @@ export class UserAssessmentsController {
   ) {}
 
   @Get(':courseId')
-  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get all user assessments for a course' })
+  @ApiParam({ name: 'courseId', description: 'ID of the course' })
+  @ApiResponse({
+    status: 200,
+    description: 'User assessments retrieved successfully.',
+  })
   async getCourseAssessments(
     @Param('courseId') courseId: string,
-    @Request() req,
+    @CurrentUser() user: User,
   ) {
-    return this.userAssessmentsService.getCourseAssessments(
-      req.user.id,
-      courseId,
-    );
+    return this.userAssessmentsService.getCourseAssessments(user.id, courseId);
   }
 
   @Get(':courseId/:assessmentId')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get user assessment by assessment id' })
+  @ApiOperation({ summary: 'Get user assessment by assessment ID' })
+  @ApiParam({ name: 'courseId', description: 'ID of the course' })
+  @ApiParam({ name: 'assessmentId', description: 'ID of the assessment' })
+  @ApiResponse({
+    status: 200,
+    description: 'User assessment retrieved successfully.',
+  })
   async getAssessment(
     @Param('courseId') courseId: string,
     @Param('assessmentId') assessmentId: string,
-    @Request() req,
+    @CurrentUser() user: User,
   ) {
     return this.userAssessmentsService.getAssessment(
-      req.user.id,
+      user.id,
       courseId,
       assessmentId,
     );
   }
 
   @Post(':courseId/:assessmentId/start')
-  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Start an assessment' })
+  @ApiParam({ name: 'courseId', description: 'ID of the course' })
+  @ApiParam({ name: 'assessmentId', description: 'ID of the assessment' })
+  @ApiResponse({ status: 201, description: 'Assessment started successfully.' })
   async startAssessment(
     @Param('courseId') courseId: string,
     @Param('assessmentId') assessmentId: string,
-    @Request() req,
+    @CurrentUser() user: User,
   ) {
     return this.userAssessmentsService.startAssessment(
-      req.user.id,
+      user.id,
       courseId,
       assessmentId,
     );
   }
 
   @Post(':courseId/:assessmentId/submit')
-  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Submit an assessment' })
+  @ApiParam({ name: 'courseId', description: 'ID of the course' })
+  @ApiParam({ name: 'assessmentId', description: 'ID of the assessment' })
+  @ApiBody({ type: SubmitAssessmentDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Assessment submitted successfully.',
+  })
   async submitAssessment(
     @Param('courseId') courseId: string,
     @Param('assessmentId') assessmentId: string,
     @Body() submitAssessmentDto: SubmitAssessmentDto,
-    @Request() req,
+    @CurrentUser() user: User,
   ) {
     return this.userAssessmentsService.submitAssessment(
-      req.user.id,
+      user.id,
       courseId,
       assessmentId,
       submitAssessmentDto,
@@ -84,15 +95,20 @@ export class UserAssessmentsController {
   }
 
   @Get(':courseId/:assessmentId/results')
-  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get assessment results' })
+  @ApiParam({ name: 'courseId', description: 'ID of the course' })
+  @ApiParam({ name: 'assessmentId', description: 'ID of the assessment' })
+  @ApiResponse({
+    status: 200,
+    description: 'Assessment results retrieved successfully.',
+  })
   async getResults(
     @Param('courseId') courseId: string,
     @Param('assessmentId') assessmentId: string,
-    @Request() req,
+    @CurrentUser() user: User,
   ) {
     return this.userAssessmentsService.getResults(
-      req.user.id,
+      user.id,
       courseId,
       assessmentId,
     );

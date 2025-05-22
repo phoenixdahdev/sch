@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import {
   Controller,
   Get,
@@ -11,12 +7,11 @@ import {
   Param,
   Body,
   UseGuards,
-  Request,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { MaterialsService } from '../services/materials.service';
-import { CreateMaterialDto, UpdateMaterialDto } from '../dtos/materials.dto';
-import { AuthGuard } from '../guards/auth.guard';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard, Roles, UserType } from '@kemuko-org/shared-utils';
+import { CreateMaterialDto, UpdateMaterialDto } from '@dto/materials.dto';
 
 @ApiTags('materials')
 @Controller('lessons/:lessonId/materials')
@@ -37,44 +32,35 @@ export class MaterialsController {
 
   @Post()
   @UseGuards(AuthGuard)
+  @Roles([UserType.Admin, UserType.Instructor])
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new material' })
   async create(
     @Param('lessonId') lessonId: string,
     @Body() createMaterialDto: CreateMaterialDto,
-    @Request() req,
   ) {
-    return this.materialsService.create(
-      lessonId,
-      createMaterialDto,
-      req.user.id,
-    );
+    return this.materialsService.create(lessonId, createMaterialDto);
   }
 
   @Put(':id')
   @UseGuards(AuthGuard)
+  @Roles([UserType.Admin, UserType.Instructor])
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a material' })
   async update(
     @Param('lessonId') lessonId: string,
     @Param('id') id: string,
     @Body() updateMaterialDto: UpdateMaterialDto,
-    @Request() req,
   ) {
-    return this.materialsService.update(
-      lessonId,
-      id,
-      updateMaterialDto,
-      req.user.id,
-    );
+    return this.materialsService.update(lessonId, id, updateMaterialDto);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
+  @Roles([UserType.Admin, UserType.Instructor])
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a material' })
-  async remove(
-    @Param('lessonId') lessonId: string,
-    @Param('id') id: string,
-    @Request() req,
-  ) {
-    return this.materialsService.remove(lessonId, id, req.user.id);
+  async remove(@Param('lessonId') lessonId: string, @Param('id') id: string) {
+    return this.materialsService.remove(lessonId, id);
   }
 }
