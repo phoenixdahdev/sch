@@ -33,7 +33,7 @@ import { Review } from '@entities/review.entity';
 @ApiTags('courses')
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(private readonly coursesService: CoursesService) { }
 
   @Get()
   @ApiOperation({
@@ -103,7 +103,7 @@ export class CoursesController {
     @Body() createCourseDto: CreateCourseDto,
     @CurrentUser() user: User,
   ) {
-    return this.coursesService.create(createCourseDto, user.id as string);
+    return this.coursesService.create(createCourseDto, user.id);
   }
 
   @Put(':id')

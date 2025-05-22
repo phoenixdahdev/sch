@@ -42,6 +42,7 @@ async function bootstrap() {
       'Public and unprotected endpoints for authentication and user management on the KEMUKO Education Platform',
     )
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
