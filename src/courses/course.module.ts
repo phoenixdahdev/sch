@@ -42,7 +42,6 @@ import {
 } from '../actions/model-actions';
 import controllers from './base.controller';
 import { services } from './base.service';
-import { MulterModule } from '@nestjs/platform-express';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
@@ -68,9 +67,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       Notification,
       CourseModules,
     ]),
-    MulterModule.register({
-      dest: './uploads',
-    }),
     EventEmitterModule.forRoot(),
   ],
   providers: [
@@ -98,4 +94,4 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
   controllers: [...controllers],
   exports: [...services],
 })
-export class CourseModule {}
+export class CourseModule { }
