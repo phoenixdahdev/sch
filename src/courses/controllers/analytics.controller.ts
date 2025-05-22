@@ -5,11 +5,12 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { AnalyticsService } from '../services/analytics.service';
 import { AuthGuard, CurrentUser, Roles, User } from '@kemuko-org/shared-utils';
 
 @ApiTags('analytics')
+@ApiBearerAuth()
 @Controller('analytics')
 @UseGuards(AuthGuard)
 export class AnalyticsController {
