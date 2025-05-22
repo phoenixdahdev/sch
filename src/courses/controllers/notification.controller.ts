@@ -7,7 +7,7 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
 import { NotificationService } from '../services/notification.service';
 import {
   AuthGuard,
@@ -19,9 +19,10 @@ import FindRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/fi
 import { Notification } from '@entities/notification.entity';
 
 @ApiTags('notifications')
+@ApiBearerAuth()
 @Controller('notifications')
 export class NotificationController {
-  constructor(private readonly notificationService: NotificationService) {}
+  constructor(private readonly notificationService: NotificationService) { }
 
   @Get()
   @UseGuards(AuthGuard)

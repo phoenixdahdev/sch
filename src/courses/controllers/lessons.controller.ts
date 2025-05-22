@@ -8,7 +8,11 @@ import {
   Body,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { LessonsService } from '../services/lessons.service';
 import { AuthGuard, Roles, UserType } from '@kemuko-org/shared-utils';
 import { CreateLessonDto, UpdateLessonDto } from '@dto/lessons.dto';
@@ -16,7 +20,7 @@ import { CreateLessonDto, UpdateLessonDto } from '@dto/lessons.dto';
 @ApiTags('lessons')
 @Controller('modules/:moduleId/lessons')
 export class LessonsController {
-  constructor(private readonly lessonsService: LessonsService) {}
+  constructor(private readonly lessonsService: LessonsService) { }
 
   @Get()
   @ApiOperation({ summary: 'Get all lessons for a module' })
@@ -33,7 +37,8 @@ export class LessonsController {
   @Post()
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Create a new lesson' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create a new lesson (requires authentication)' })
   async create(
     @Param('moduleId') moduleId: string,
     @Body() createLessonDto: CreateLessonDto,
@@ -44,7 +49,8 @@ export class LessonsController {
   @Put(':id')
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Update a lesson' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update a lesson (requires authentication)' })
   async update(
     @Param('moduleId') moduleId: string,
     @Param('id') id: string,
@@ -56,7 +62,8 @@ export class LessonsController {
   @Delete(':id')
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Delete a lesson' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a lesson (requires authentication)' })
   async remove(@Param('moduleId') moduleId: string, @Param('id') id: string) {
     return this.lessonsService.remove(moduleId, id);
   }
@@ -64,7 +71,8 @@ export class LessonsController {
   @Put('reorder')
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Reorder lessons' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Reorder lessons (requires authentication)' })
   async reorder(
     @Param('moduleId') moduleId: string,
     @Body() reorderDto: { lessonIds: string[] },

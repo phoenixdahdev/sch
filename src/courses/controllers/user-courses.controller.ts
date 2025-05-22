@@ -7,15 +7,16 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UserCoursesService } from '../services/user-courses.service';
 import { AuthGuard, CurrentUser, User } from '@kemuko-org/shared-utils';
 import { UserCourseQueryDto } from '@dto/user-course-query.dto';
 
 @ApiTags('user-courses')
+@ApiBearerAuth()
 @Controller('user-courses')
 export class UserCoursesController {
-  constructor(private readonly userCoursesService: UserCoursesService) {}
+  constructor(private readonly userCoursesService: UserCoursesService) { }
 
   @Get()
   @UseGuards(AuthGuard)

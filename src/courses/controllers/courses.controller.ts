@@ -6,7 +6,11 @@ import {
   User,
   UserType,
 } from '@kemuko-org/shared-utils';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { CoursesService } from '../services/course.service';
 import {
   CourseFilterDto,
@@ -98,7 +102,8 @@ export class CoursesController {
   @Post()
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Create a new course' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create a new course (requires authentication)' })
   async create(
     @Body() createCourseDto: CreateCourseDto,
     @CurrentUser() user: User,
@@ -109,7 +114,8 @@ export class CoursesController {
   @Put(':id')
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Update a course' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update a course (requires authentication)' })
   async update(
     @Param('id') id: string,
     @Body() updateCourseDto: UpdateCourseDto,
@@ -120,7 +126,8 @@ export class CoursesController {
   @Delete(':id')
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Delete a course' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a course (requires authentication)' })
   async remove(@Param('id') id: string) {
     return this.coursesService.remove(id);
   }
@@ -128,7 +135,8 @@ export class CoursesController {
   @Post(':id/publish')
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Publish a course' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Publish a course (requires authentication)' })
   async publish(@Param('id') id: string) {
     const updateDto: UpdateCourseDto = { is_published: true };
     return this.coursesService.update(id, updateDto);
@@ -137,7 +145,8 @@ export class CoursesController {
   @Post(':id/unpublish')
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Unpublish a course' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Unpublish a course (requires authentication)' })
   async unpublish(@Param('id') id: string) {
     const updateDto: UpdateCourseDto = { is_published: false };
     return this.coursesService.update(id, updateDto);

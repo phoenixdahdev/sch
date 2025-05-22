@@ -6,14 +6,15 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { CartService } from '../services/cart.service';
 import { AuthGuard, CurrentUser, User } from '@kemuko-org/shared-utils';
 
 @ApiTags('cart')
+@ApiBearerAuth()
 @Controller('cart')
 export class CartController {
-  constructor(private readonly cartService: CartService) {}
+  constructor(private readonly cartService: CartService) { }
 
   @Get()
   @UseGuards(AuthGuard)

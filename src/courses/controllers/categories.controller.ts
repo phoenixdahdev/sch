@@ -1,4 +1,8 @@
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth
+} from '@nestjs/swagger';
 import { CategoriesService } from '../services/categories.service';
 import { CreateCategoryDto, UpdateCategoryDto } from '@dto/categories.dto';
 import {
@@ -22,7 +26,8 @@ import {
 @ApiTags('Categories')
 @Controller('categories')
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(private readonly categoriesService: CategoriesService) { }
+
   @Get()
   @ApiOperation({ summary: 'Get all categories' })
   async findAll(@Query() pagination?: PaginationValidator) {
@@ -45,7 +50,8 @@ export class CategoriesController {
   @Post()
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Create a new category' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create a new category (requires authentication)' })
   async create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
   }
@@ -53,7 +59,8 @@ export class CategoriesController {
   @Put(':id')
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Update a category' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update a category (requires authentication)' })
   async update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
@@ -64,7 +71,8 @@ export class CategoriesController {
   @Delete(':id')
   @UseGuards(AuthGuard)
   @Roles([UserType.Admin, UserType.Instructor])
-  @ApiOperation({ summary: 'Delete a category' })
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete a category (requires authentication)' })
   async remove(@Param('id') id: string) {
     return this.categoriesService.remove(id);
   }

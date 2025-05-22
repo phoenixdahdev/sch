@@ -9,7 +9,11 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { ReviewsService } from '../services/reviews.service';
 import { CreateReviewDto, UpdateReviewDto } from '@dto/reviews.dto';
 import {
@@ -22,7 +26,7 @@ import {
 @ApiTags('reviews')
 @Controller('reviews')
 export class ReviewsController {
-  constructor(private readonly reviewsService: ReviewsService) {}
+  constructor(private readonly reviewsService: ReviewsService) { }
 
   @Get('course/:courseId')
   @ApiOperation({ summary: 'Get all reviews for a course' })
@@ -44,7 +48,10 @@ export class ReviewsController {
 
   @Get('user')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get all reviews by current user' })
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get all reviews by current user (requires authentication)',
+  })
   async findByUser(
     @CurrentUser() user: User,
     @Query() pagination?: PaginationValidator,
@@ -69,7 +76,10 @@ export class ReviewsController {
 
   @Post('course/:courseId')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Create a new review' })
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Create a new review (requires authentication)',
+  })
   async create(
     @Param('courseId') courseId: string,
     @Body() createReviewDto: CreateReviewDto,
@@ -80,7 +90,10 @@ export class ReviewsController {
 
   @Put(':id')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Update a review' })
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update a review (requires authentication)',
+  })
   async update(
     @Param('id') id: string,
     @Body() updateReviewDto: UpdateReviewDto,
@@ -91,7 +104,10 @@ export class ReviewsController {
 
   @Delete(':id')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Delete a review' })
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete a review (requires authentication)',
+  })
   async remove(@Param('id') id: string, @CurrentUser() user: User) {
     return this.reviewsService.remove(id, user.id);
   }
