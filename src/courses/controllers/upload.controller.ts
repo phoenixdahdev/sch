@@ -1,58 +1,107 @@
-/* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import {
   Controller,
   Post,
   UseInterceptors,
   UploadedFile,
   UseGuards,
-  Request,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiConsumes } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
 import { UploadService } from '../services/upload.service';
-import { AuthGuard } from '../guards/auth.guard';
+import { AuthGuard } from '@kemuko-org/shared-utils';
 
 @ApiTags('upload')
+@UseGuards(AuthGuard)
 @Controller('upload')
 export class UploadController {
-  constructor(private readonly uploadService: UploadService) {}
+  constructor(private readonly uploadService: UploadService) { }
 
   @Post('image')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Upload image' })
+  @ApiOperation({ summary: 'Upload an image file' })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'Image file (jpeg, png, gif)',
+        },
+      },
+      required: ['file'],
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadImage(@UploadedFile() file, @Request() req) {
-    return this.uploadService.uploadImage(file, req.user.id);
+  async uploadImage(@UploadedFile() file: Express.Multer.File) {
+    return this.uploadService.uploadImage(file);
   }
 
   @Post('video')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Upload video' })
+  @ApiOperation({ summary: 'Upload a video file' })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'Video file (mp4, webm, ogg)',
+        },
+      },
+      required: ['file'],
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadVideo(@UploadedFile() file, @Request() req) {
-    return this.uploadService.uploadVideo(file, req.user.id);
+  async uploadVideo(@UploadedFile() file: Express.Multer.File) {
+    return this.uploadService.uploadVideo(file);
   }
 
   @Post('document')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Upload document' })
+  @ApiOperation({ summary: 'Upload a document file' })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'Document file (pdf, doc, docx, txt)',
+        },
+      },
+      required: ['file'],
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadDocument(@UploadedFile() file, @Request() req) {
-    return this.uploadService.uploadDocument(file, req.user.id);
+  async uploadDocument(@UploadedFile() file: Express.Multer.File) {
+    return this.uploadService.uploadDocument(file);
   }
 
   @Post('thumbnail')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Upload course thumbnail' })
+  @ApiOperation({ summary: 'Upload a course thumbnail image' })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'Thumbnail image (jpeg, png)',
+        },
+      },
+      required: ['file'],
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadThumbnail(@UploadedFile() file, @Request() req) {
-    return this.uploadService.uploadThumbnail(file, req.user.id);
+  async uploadThumbnail(@UploadedFile() file: Express.Multer.File) {
+    return this.uploadService.uploadThumbnail(file);
   }
 }

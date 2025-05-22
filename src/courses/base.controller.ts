@@ -10,6 +10,8 @@ import { PaymentController } from './controllers/payment.controller';
 import { CertificateController } from './controllers/certificate.controller';
 import { WishlistController } from './controllers/wishlist.controller';
 import { NotificationController } from './controllers/notification.controller';
+import { SearchController } from './controllers/search.controller';
+import { UploadController } from './controllers/upload.controller';
 
 const controllers: Type<any>[] = [
   CategoriesController,
@@ -22,7 +24,9 @@ const controllers: Type<any>[] = [
   PaymentController,
   CertificateController,
   WishlistController,
-  NotificationController
+  NotificationController,
+  SearchController,
+  UploadController
 ];
 
 export default controllers;

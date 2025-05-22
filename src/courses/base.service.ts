@@ -10,6 +10,8 @@ import { CertificateService } from './services/certificate.service';
 import { WishlistService } from './services/wishlist.service';
 import { PaymentService } from './services/payment.service';
 import { NotificationService } from './services/notification.service';
+import { SearchService } from './services/search.service';
+import { UploadService } from './services/upload.service';
 
 export const services: Provider[] = [
   CoursesService,
@@ -23,4 +25,6 @@ export const services: Provider[] = [
   CertificateService,
   WishlistService,
   NotificationService,
+  SearchService,
+  UploadService
 ];

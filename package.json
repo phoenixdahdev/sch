@@ -26,6 +26,8 @@
     "sync": "typeorm-ts-node-commonjs schema:sync -d ./src/database/datasource.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.815.0",
+    "@aws-sdk/s3-request-presigner": "^3.815.0",
     "@kemuko-org/shared-utils": "^0.1.18",
     "@nestjs/common": "^11.1.1",
     "@nestjs/config": "^4.0.2",
@@ -40,6 +42,7 @@
     "class-validator": "^0.14.2",
     "globals": "^16.1.0",
     "helmet": "^8.1.0",
+    "mime-types": "^3.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "swagger-ui-express": "^5.0.1",
@@ -54,6 +57,8 @@
     "@nestjs/testing": "^11.1.1",
     "@types/express": "^5.0.2",
     "@types/jest": "^29.5.14",
+    "@types/mime-types": "^2.1.4",
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.15.21",
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.32.1",

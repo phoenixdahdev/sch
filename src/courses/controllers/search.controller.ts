@@ -1,19 +1,16 @@
-/* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { SearchService } from '../services/search.service';
+import { SearchQueryDto, AdvancedSearchDto } from '@dto/search.dto';
 
 @ApiTags('search')
 @Controller('search')
 export class SearchController {
-  constructor(private readonly searchService: SearchService) {}
+  constructor(private readonly searchService: SearchService) { }
 
   @Get()
   @ApiOperation({ summary: 'Search courses' })
-  async search(@Query() query) {
+  async search(@Query() query: SearchQueryDto) {
     return this.searchService.search(query);
   }
 
@@ -31,7 +28,7 @@ export class SearchController {
 
   @Get('advanced')
   @ApiOperation({ summary: 'Advanced search' })
-  async advancedSearch(@Query() query) {
+  async advancedSearch(@Query() query: AdvancedSearchDto) {
     return this.searchService.advancedSearch(query);
   }
 }
