@@ -85,7 +85,7 @@ export class PaymentService {
       amount: Math.round(cart.total_price * 100),
       currency: createPaymentIntentDto.currency || 'NGN',
       reference: paymentIntent.id,
-      callback_url: this.configService.get<string>("PAYSTACK_CALLBACK_URL"),
+      callback_url: createPaymentIntentDto.callback_url ?? this.configService.get<string>("PAYSTACK_CALLBACK_URL"),
       metadata: {
         payment_intent_id: paymentIntent.id,
         user_id: user.id,
