@@ -43,6 +43,7 @@ import {
 import controllers from './base.controller';
 import { services } from './base.service';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       Notification,
       CourseModules,
     ]),
+    HttpModule,
     EventEmitterModule.forRoot(),
   ],
   providers: [

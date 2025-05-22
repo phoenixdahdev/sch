@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsObject,
   IsEnum,
+  IsUrl,
 } from 'class-validator';
 
 export class CreatePaymentIntentDto {
@@ -26,4 +27,22 @@ export class CreatePaymentIntentDto {
   @IsObject()
   @IsOptional()
   metadata?: Record<string, any>;
+
+  @ApiPropertyOptional({
+    description: 'Callback URL after payment completion',
+    example: 'https://yourapp.com/payment/success',
+  })
+  @IsOptional()
+  @IsUrl()
+  callback_url?: string;
+}
+
+export class VerifyPaymentDto {
+  @ApiProperty({
+    description: 'Paystack payment reference',
+    example: 'trx_1234567890',
+  })
+  @IsNotEmpty()
+  @IsString()
+  reference: string;
 }

@@ -29,6 +29,7 @@
     "@aws-sdk/client-s3": "^3.815.0",
     "@aws-sdk/s3-request-presigner": "^3.815.0",
     "@kemuko-org/shared-utils": "^0.1.18",
+    "@nestjs/axios": "^4.0.0",
     "@nestjs/common": "^11.1.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.1",
