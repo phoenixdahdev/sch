@@ -8,7 +8,7 @@ import { buildResponse } from '@kemuko-org/shared-utils';
 export class NotificationService {
   constructor(
     private readonly notificationModelAction: NotificationModelAction,
-  ) {}
+  ) { }
 
   async findAll(findOptions: FindRecordGeneric<Partial<Notification>>) {
     const notifications = await this.notificationModelAction.find(findOptions);
@@ -18,14 +18,6 @@ export class NotificationService {
       meta: notifications.paginationMeta,
     };
   }
-
-  // async findUnread(userId: string): Promise<Notification[]> {
-  //     return this.notificationRepository.find({
-  //         where: { user_id: userId, is_read: false },
-  //         order: { created_at: 'DESC' },
-  //     });
-  // }
-
   async findOne(id: string, userId: string) {
     const notification = await this.notificationModelAction.get({
       id,
