@@ -18,7 +18,7 @@ import { PaymentIntentStatus } from '@entities/payment_intent.entity';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import * as crypto from 'crypto'
+import * as crypto from 'crypto';
 import { PaystackWebhookEventData, WebHookData } from '@/types/index';
 
 interface PaymentIntentMetadata {
@@ -41,7 +41,9 @@ export class PaymentService {
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
   ) {
-    this.paystackSecretKey = this.configService.get<string>('PAYSTACK_SECRET_KEY');
+    this.paystackSecretKey = this.configService.get<string>(
+      'PAYSTACK_SECRET_KEY',
+    );
   }
 
   private getPaystackHeaders() {
@@ -85,7 +87,9 @@ export class PaymentService {
       amount: Math.round(cart.total_price * 100),
       currency: createPaymentIntentDto.currency || 'NGN',
       reference: paymentIntent.id,
-      callback_url: createPaymentIntentDto.callback_url ?? this.configService.get<string>("PAYSTACK_CALLBACK_URL"),
+      callback_url:
+        createPaymentIntentDto.callback_url ??
+        this.configService.get<string>('PAYSTACK_CALLBACK_URL'),
       metadata: {
         payment_intent_id: paymentIntent.id,
         user_id: user.id,
@@ -107,7 +111,9 @@ export class PaymentService {
         transactionOptions: { useTransaction: false },
       });
 
-      throw new InternalServerErrorException('Failed to initialize payment with Paystack');
+      throw new InternalServerErrorException(
+        'Failed to initialize payment with Paystack',
+      );
     }
 
     const updatedPaymentIntent = await this.paymentIntentModelAction.update({
@@ -134,7 +140,6 @@ export class PaymentService {
       'Payment intent has been created successfully',
     );
   }
-
 
   // async confirmIntent(userId: string, intentId: string) {
   //   return await this.dataSource.transaction(async (manager) => {
@@ -223,12 +228,13 @@ export class PaymentService {
       }
 
       if (intent.status !== PaymentIntentStatus.PENDING) {
-        throw new BadRequestException('Payment intent has already been processed');
+        throw new BadRequestException(
+          'Payment intent has already been processed',
+        );
       }
 
       try {
-
-        const metadata: PaymentIntentMetadata = intent.metadata
+        const metadata: PaymentIntentMetadata = intent.metadata;
         const paystackReference = metadata.paystack_reference || intentId;
         const verificationResponse = await firstValueFrom(
           this.httpService.get(
@@ -237,10 +243,12 @@ export class PaymentService {
           ),
         );
 
-        if (!verificationResponse.data.status || verificationResponse.data.data.status !== 'success') {
+        if (
+          !verificationResponse.data.status ||
+          verificationResponse.data.data.status !== 'success'
+        ) {
           throw new BadRequestException('Payment verification failed');
         }
-
 
         const expectedAmount = Math.round(intent.amount * 100);
         if (verificationResponse.data.data.amount !== expectedAmount) {
@@ -282,7 +290,9 @@ export class PaymentService {
           });
           enrollments.push(userCourse);
 
-          const course = await this.courseModelAction.get({ id: item.course_id });
+          const course = await this.courseModelAction.get({
+            id: item.course_id,
+          });
           await this.courseModelAction.update({
             identifierOptions: { id: item.course_id },
             updatePayload: {
@@ -296,7 +306,9 @@ export class PaymentService {
         }
 
         await Promise.all(enrollments);
-        await manager.query(`DELETE FROM cart_items WHERE cart_id = $1`, [cart.id]);
+        await manager.query(`DELETE FROM cart_items WHERE cart_id = $1`, [
+          cart.id,
+        ]);
         await this.cartModelAction.delete({
           identifierOptions: { id: cart.id, user_id: userId },
           transactionOptions: {
@@ -320,20 +332,30 @@ export class PaymentService {
           },
         });
 
-        if (error instanceof BadRequestException || error instanceof NotFoundException) {
+        if (
+          error instanceof BadRequestException ||
+          error instanceof NotFoundException
+        ) {
           throw error;
         }
         if (error.response?.data) {
           this.logger.error('Paystack API Error:', error.response.data);
-          throw new BadRequestException(error.response.data.message || 'Payment verification failed');
+          throw new BadRequestException(
+            error.response.data.message || 'Payment verification failed',
+          );
         }
 
-        throw new InternalServerErrorException('Failed to confirm payment intent');
+        throw new InternalServerErrorException(
+          'Failed to confirm payment intent',
+        );
       }
     });
   }
 
-  async handleWebhook(webhookData: PaystackWebhookEventData, signature: string) {
+  async handleWebhook(
+    webhookData: PaystackWebhookEventData,
+    signature: string,
+  ) {
     try {
       const hash = crypto
         .createHmac('sha512', this.paystackSecretKey)
@@ -372,11 +394,16 @@ export class PaymentService {
 
   private async handleSuccessfulPayment(paymentData: WebHookData) {
     const reference = paymentData.reference;
-    const paymentIntentId: string = paymentData.metadata?.payment_intent_id || reference;
+    const paymentIntentId: string =
+      paymentData.metadata?.payment_intent_id || reference;
     try {
-      const intent = await this.paymentIntentModelAction.get({ id: paymentIntentId });
+      const intent = await this.paymentIntentModelAction.get({
+        id: paymentIntentId,
+      });
       if (!intent) {
-        this.logger.warn(`Payment intent not found for reference: ${reference}`);
+        this.logger.warn(
+          `Payment intent not found for reference: ${reference}`,
+        );
         return;
       }
       if (intent.status === PaymentIntentStatus.SUCCEEDED) {
@@ -385,13 +412,17 @@ export class PaymentService {
       }
       await this.confirmIntent(intent.user_id, paymentIntentId);
     } catch (error) {
-      this.logger.error(`Error handling successful payment for reference ${reference}:`, error);
+      this.logger.error(
+        `Error handling successful payment for reference ${reference}:`,
+        error,
+      );
     }
   }
 
   private async handleFailedPayment(paymentData: WebHookData) {
     const reference = paymentData.reference;
-    const paymentIntentId = paymentData.metadata?.payment_intent_id || reference;
+    const paymentIntentId =
+      paymentData.metadata?.payment_intent_id || reference;
 
     try {
       await this.paymentIntentModelAction.update({
@@ -406,7 +437,10 @@ export class PaymentService {
         transactionOptions: { useTransaction: false },
       });
     } catch (error) {
-      this.logger.error(`Error handling failed payment for reference ${reference}:`, error);
+      this.logger.error(
+        `Error handling failed payment for reference ${reference}:`,
+        error,
+      );
     }
   }
 
@@ -443,7 +477,6 @@ export class PaymentService {
     );
   }
 
-
   async verifyPayment(reference: string) {
     try {
       const response = await firstValueFrom(
@@ -460,7 +493,9 @@ export class PaymentService {
     } catch (error) {
       if (error.response?.data) {
         this.logger.error('Paystack API Error:', error.response.data);
-        throw new BadRequestException(error.response.data.message || 'Payment verification failed');
+        throw new BadRequestException(
+          error.response.data.message || 'Payment verification failed',
+        );
       }
       throw new InternalServerErrorException('Failed to verify payment');
     }
@@ -498,7 +533,9 @@ export class PaymentService {
       );
     } catch (error) {
       this.logger.error('Error fetching transaction timeline:', error);
-      throw new InternalServerErrorException('Failed to fetch transaction timeline');
+      throw new InternalServerErrorException(
+        'Failed to fetch transaction timeline',
+      );
     }
   }
 
@@ -509,11 +546,9 @@ export class PaymentService {
         payload.amount = Math.round(amount * 100);
       }
       const response = await firstValueFrom(
-        this.httpService.post(
-          `${this.paystackBaseUrl}/refund`,
-          payload,
-          { headers: this.getPaystackHeaders() },
-        ),
+        this.httpService.post(`${this.paystackBaseUrl}/refund`, payload, {
+          headers: this.getPaystackHeaders(),
+        }),
       );
       return buildResponse(
         { refund: response.data.data },
@@ -522,7 +557,9 @@ export class PaymentService {
     } catch (error) {
       this.logger.error('Error processing refund:', error);
       if (error.response?.data) {
-        throw new BadRequestException(error.response.data.message || 'Refund failed');
+        throw new BadRequestException(
+          error.response.data.message || 'Refund failed',
+        );
       }
       throw new InternalServerErrorException('Failed to process refund');
     }

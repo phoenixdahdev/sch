@@ -12,6 +12,7 @@ import { WishlistController } from './controllers/wishlist.controller';
 import { NotificationController } from './controllers/notification.controller';
 import { SearchController } from './controllers/search.controller';
 import { UploadController } from './controllers/upload.controller';
+import { AnalyticsController } from './controllers/analytics.controller';
 
 const controllers: Type<any>[] = [
   CategoriesController,
@@ -26,7 +27,8 @@ const controllers: Type<any>[] = [
   WishlistController,
   NotificationController,
   SearchController,
-  UploadController
+  UploadController,
+  AnalyticsController
 ];
 
 export default controllers;

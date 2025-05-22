@@ -96,4 +96,4 @@ import { HttpModule } from '@nestjs/axios';
   controllers: [...controllers],
   exports: [...services],
 })
-export class CourseModule { }
+export class CourseModule {}

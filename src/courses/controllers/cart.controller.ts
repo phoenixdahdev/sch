@@ -14,7 +14,7 @@ import { AuthGuard, CurrentUser, User } from '@kemuko-org/shared-utils';
 @ApiBearerAuth()
 @Controller('cart')
 export class CartController {
-  constructor(private readonly cartService: CartService) { }
+  constructor(private readonly cartService: CartService) {}
 
   @Get()
   @UseGuards(AuthGuard)

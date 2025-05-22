@@ -23,7 +23,7 @@ import { PaystackWebhookEventData } from '@/types/index';
 @ApiTags('payment')
 @Controller('payment')
 export class PaymentController {
-  constructor(private readonly paymentService: PaymentService) { }
+  constructor(private readonly paymentService: PaymentService) {}
 
   @Post('create-intent')
   @UseGuards(AuthGuard)
@@ -62,12 +62,12 @@ export class PaymentController {
     return this.paymentService.createIntent(user, createPaymentIntentDto);
   }
 
-
   @Post('confirm-intent/:intentId')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Confirm payment intent after successful payment (requires authentication)',
+    summary:
+      'Confirm payment intent after successful payment (requires authentication)',
   })
   @ApiResponse({
     status: 200,
@@ -94,12 +94,12 @@ export class PaymentController {
     return this.paymentService.verifyPayment(verifyPaymentDto.reference);
   }
 
-
   @Post('webhook')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Handle Paystack webhook events (public endpoint)',
-    description: 'This endpoint is called by Paystack to handle webhook events. Signature verification is required.',
+    description:
+      'This endpoint is called by Paystack to handle webhook events. Signature verification is required.',
   })
   @ApiResponse({
     status: 200,

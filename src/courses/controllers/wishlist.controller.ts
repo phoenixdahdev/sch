@@ -14,7 +14,7 @@ import { AuthGuard, CurrentUser, User } from '@kemuko-org/shared-utils';
 @ApiBearerAuth()
 @Controller('wishlist')
 export class WishlistController {
-  constructor(private readonly wishlistService: WishlistService) { }
+  constructor(private readonly wishlistService: WishlistService) {}
 
   @Get()
   @UseGuards(AuthGuard)

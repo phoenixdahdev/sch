@@ -1,114 +1,123 @@
-/* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import {
   Controller,
   Get,
   Param,
   Query,
   UseGuards,
-  Request,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { AnalyticsService } from '../services/analytics.service';
-import { AuthGuard } from '../guards/auth.guard';
-import { RolesGuard } from '../guards/roles.guard';
-import { Roles } from '../decorators/roles.decorator';
+import { AuthGuard, CurrentUser, Roles, User } from '@kemuko-org/shared-utils';
 
 @ApiTags('analytics')
 @Controller('analytics')
+@UseGuards(AuthGuard)
 export class AnalyticsController {
-  constructor(private readonly analyticsService: AnalyticsService) {}
+  constructor(private readonly analyticsService: AnalyticsService) { }
 
-  // Creator analytics
   @Get('creator/courses')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get analytics for creator courses' })
-  async getCreatorCourseAnalytics(@Request() req, @Query() query) {
-    return this.analyticsService.getCreatorCourseAnalytics(req.user.id, query);
+  @ApiOperation({ summary: 'Get analytics for all creator courses' })
+  @ApiQuery({ name: 'period', required: false, description: 'Time period for analytics (e.g. week, month, year)' })
+  async getCreatorCourseAnalytics(
+    @CurrentUser() user: User,
+    @Query('period') period: string,
+  ) {
+    return this.analyticsService.getCreatorCourseAnalytics(user.id, period);
   }
 
   @Get('creator/courses/:courseId')
-  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get analytics for a specific creator course' })
+  @ApiParam({ name: 'courseId', description: 'ID of the course' })
+  @ApiQuery({ name: 'period', required: false, description: 'Time period for analytics (e.g. week, month, year)' })
   async getCreatorCourseDetailAnalytics(
     @Param('courseId') courseId: string,
-    @Request() req,
-    @Query() query,
+    @CurrentUser() user: User,
+    @Query('period') period: string,
   ) {
     return this.analyticsService.getCreatorCourseDetailAnalytics(
-      req.user.id,
+      user.id,
       courseId,
-      query,
+      period,
     );
   }
 
   @Get('creator/revenue')
-  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get revenue analytics for creator' })
-  async getCreatorRevenueAnalytics(@Request() req, @Query() query) {
-    return this.analyticsService.getCreatorRevenueAnalytics(req.user.id, query);
+  @ApiQuery({ name: 'period', required: false, description: 'Time period for analytics (e.g. week, month, year)' })
+  async getCreatorRevenueAnalytics(
+    @CurrentUser() user: User,
+    @Query('period') period: string,
+  ) {
+    return this.analyticsService.getCreatorRevenueAnalytics(user.id, period);
   }
 
   @Get('creator/students')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get student analytics for creator' })
-  async getCreatorStudentAnalytics(@Request() req, @Query() query) {
-    return this.analyticsService.getCreatorStudentAnalytics(req.user.id, query);
+  @ApiOperation({ summary: 'Get student engagement analytics for creator' })
+  @ApiQuery({ name: 'period', required: false, description: 'Time period for analytics (e.g. week, month, year)' })
+  async getCreatorStudentAnalytics(
+    @CurrentUser() user: User,
+    @Query('period') period: string,
+  ) {
+    return this.analyticsService.getCreatorStudentAnalytics(user.id, period);
   }
 
-  // Student analytics
   @Get('student/learning')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get learning analytics for student' })
-  async getStudentLearningAnalytics(@Request() req, @Query() query) {
+  @ApiOperation({ summary: 'Get learning progress analytics for student' })
+  @ApiQuery({ name: 'period', required: false, description: 'Time period for analytics (e.g. week, month, year)' })
+  async getStudentLearningAnalytics(
+    @CurrentUser() user: User,
+    @Query('period') period: string,
+  ) {
     return this.analyticsService.getStudentLearningAnalytics(
-      req.user.id,
-      query,
+      user.id,
+      period,
     );
   }
 
   @Get('student/performance')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get performance analytics for student' })
-  async getStudentPerformanceAnalytics(@Request() req, @Query() query) {
+  @ApiOperation({ summary: 'Get performance metrics for student' })
+  @ApiQuery({ name: 'period', required: false, description: 'Time period for analytics (e.g. week, month, year)' })
+  async getStudentPerformanceAnalytics(
+    @CurrentUser() user: User,
+    @Query('period') period: string,
+  ) {
     return this.analyticsService.getStudentPerformanceAnalytics(
-      req.user.id,
-      query,
+      user.id,
+      period,
     );
   }
 
-  // Admin analytics
   @Get('admin/platform')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiOperation({ summary: 'Get platform analytics for admin' })
-  async getAdminPlatformAnalytics(@Query() query) {
-    return this.analyticsService.getAdminPlatformAnalytics(query);
+  @Roles(['admin'])
+  @ApiOperation({ summary: 'Get platform-wide analytics (admin only)' })
+  @ApiQuery({ name: 'period', required: false, description: 'Time period for analytics (e.g. week, month, year)' })
+  async getAdminPlatformAnalytics(
+    @Query('period') period: string,
+  ) {
+    return this.analyticsService.getAdminPlatformAnalytics(period);
   }
 
   @Get('admin/revenue')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiOperation({ summary: 'Get revenue analytics for admin' })
-  async getAdminRevenueAnalytics(@Query() query) {
-    return this.analyticsService.getAdminRevenueAnalytics(query);
+  @Roles(['admin'])
+  @ApiOperation({ summary: 'Get platform revenue analytics (admin only)' })
+  @ApiQuery({ name: 'period', required: false, description: 'Time period for analytics (e.g. week, month, year)' })
+  async getAdminRevenueAnalytics(
+    @Query('period') period: string,
+  ) {
+    return this.analyticsService.getAdminRevenueAnalytics(period);
   }
 
   @Get('admin/users')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiOperation({ summary: 'Get user analytics for admin' })
-  async getAdminUserAnalytics(@Query() query) {
-    return this.analyticsService.getAdminUserAnalytics(query);
+  @Roles(['admin'])
+  @ApiOperation({ summary: 'Get platform user analytics (admin only)' })
+  getAdminUserAnalytics() {
+    return this.analyticsService.getAdminUserAnalytics();
   }
 
   @Get('admin/courses')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles('admin')
-  @ApiOperation({ summary: 'Get course analytics for admin' })
-  async getAdminCourseAnalytics(@Query() query) {
-    return this.analyticsService.getAdminCourseAnalytics(query);
+  @Roles(['admin'])
+  @ApiOperation({ summary: 'Get platform course analytics (admin only)' })
+  async getAdminCourseAnalytics() {
+    return this.analyticsService.getAdminCourseAnalytics();
   }
 }

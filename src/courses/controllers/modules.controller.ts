@@ -8,11 +8,7 @@ import {
   Body,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ModulesService } from '../services/modules.service';
 import { CreateModuleDto, UpdateModuleDto } from '@dto/modules.dto';
 import { AuthGuard, Roles, UserType } from '@kemuko-org/shared-utils';
@@ -20,7 +16,7 @@ import { AuthGuard, Roles, UserType } from '@kemuko-org/shared-utils';
 @ApiTags('modules')
 @Controller('courses/:courseId/modules')
 export class ModulesController {
-  constructor(private readonly modulesService: ModulesService) { }
+  constructor(private readonly modulesService: ModulesService) {}
 
   @Get()
   @ApiOperation({ summary: 'Get all modules for a course' })

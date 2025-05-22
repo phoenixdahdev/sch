@@ -6,7 +6,7 @@ import { SearchQueryDto, AdvancedSearchDto } from '@dto/search.dto';
 @ApiTags('search')
 @Controller('search')
 export class SearchController {
-  constructor(private readonly searchService: SearchService) { }
+  constructor(private readonly searchService: SearchService) {}
 
   @Get()
   @ApiOperation({ summary: 'Search courses' })

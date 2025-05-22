@@ -16,7 +16,7 @@ import { UserCourseQueryDto } from '@dto/user-course-query.dto';
 @ApiBearerAuth()
 @Controller('user-courses')
 export class UserCoursesController {
-  constructor(private readonly userCoursesService: UserCoursesService) { }
+  constructor(private readonly userCoursesService: UserCoursesService) {}
 
   @Get()
   @UseGuards(AuthGuard)

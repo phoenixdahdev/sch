@@ -8,11 +8,7 @@ import {
   Body,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { LessonsService } from '../services/lessons.service';
 import { AuthGuard, Roles, UserType } from '@kemuko-org/shared-utils';
 import { CreateLessonDto, UpdateLessonDto } from '@dto/lessons.dto';
@@ -20,7 +16,7 @@ import { CreateLessonDto, UpdateLessonDto } from '@dto/lessons.dto';
 @ApiTags('lessons')
 @Controller('modules/:moduleId/lessons')
 export class LessonsController {
-  constructor(private readonly lessonsService: LessonsService) { }
+  constructor(private readonly lessonsService: LessonsService) {}
 
   @Get()
   @ApiOperation({ summary: 'Get all lessons for a module' })

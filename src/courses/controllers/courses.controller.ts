@@ -6,11 +6,7 @@ import {
   User,
   UserType,
 } from '@kemuko-org/shared-utils';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { CoursesService } from '../services/course.service';
 import {
   CourseFilterDto,
@@ -37,7 +33,7 @@ import { Review } from '@entities/review.entity';
 @ApiTags('courses')
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) { }
+  constructor(private readonly coursesService: CoursesService) {}
 
   @Get()
   @ApiOperation({

@@ -8,7 +8,7 @@ import { buildResponse } from '@kemuko-org/shared-utils';
 export class NotificationService {
   constructor(
     private readonly notificationModelAction: NotificationModelAction,
-  ) { }
+  ) {}
 
   async findAll(findOptions: FindRecordGeneric<Partial<Notification>>) {
     const notifications = await this.notificationModelAction.find(findOptions);
