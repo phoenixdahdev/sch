@@ -14,19 +14,60 @@ jobs:
       HOST: ${{ secrets.HOST }}
       USERNAME: ${{ secrets.USERNAME }}
       PASSWORD: ${{ secrets.PASSWORD }}
+      SLACK_NOTIFY_URL: ${{ secrets.SLACK_NOTIFY_URL }}
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Deploy
-      run: |
-        sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << 'EOF'
-          cd ~/backend/courses
-          git pull origin main
-          chmod +x ./check-and-migrate.sh
-          ./check-and-migrate.sh
-          pnpm install
-          pnpm run build
-          pm2 restart all --update-env
-        EOF
+      - name: Set start time
+        id: start-time
+        run: echo "start_time=$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: Deploy
+        run: |
+          sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << 'EOF'
+            cd ~/backend/courses
+            git pull origin main
+            chmod +x ./check-and-migrate.sh
+            ./check-and-migrate.sh
+            pnpm install
+            pnpm run build
+            pm2 restart all --update-env
+          EOF
+
+      - name: Wait 30 seconds before notify
+        run: |
+          echo "Waiting 30 seconds before sending Slack notification..."
+          sleep 30
+
+      - name: Set end time and calculate duration (includes wait)
+        id: end-time
+        run: |
+          end_time=$(date +%s)
+          start_time=${{ steps.start-time.outputs.start_time }}
+          duration=$((end_time - start_time))
+          minutes=$((duration / 60))
+          seconds=$((duration % 60))
+          echo "duration_minutes=${minutes}" >> $GITHUB_OUTPUT
+          echo "duration_seconds=${seconds}" >> $GITHUB_OUTPUT
+
+      - name: Notify Slack - Courses Service Deployment
+        run: |
+          MINUTES=${{ steps.end-time.outputs.duration_minutes }}
+          SECONDS=${{ steps.end-time.outputs.duration_seconds }}
+          curl -X POST $SLACK_NOTIFY_URL \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"type\": \"app-notification\",
+              \"subType\": \"deployment\",
+              \"title\": \"Courses Service Deployment Successful\",
+              \"message\": \"Courses Service has been successfully deployed to production.\",
+              \"taggedUsers\": [
+                { \"email\": \"phoenixdahdev@gmail.com\", \"name\": \"Phoenix\" }
+              ],
+              \"metadata\": {
+                \"Environment\": \"Production\",
+                \"Deploy Time\": \"${MINUTES} minutes ${SECONDS} seconds\"
+              }
+            }"
