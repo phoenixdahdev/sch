@@ -19,6 +19,7 @@ import { UploadController } from './controllers/upload.controller';
 import { UserAssessmentsController } from './controllers/user-assessments.controller';
 import { UserCoursesController } from './controllers/user-courses.controller';
 import { WishlistController } from './controllers/wishlist.controller';
+import { MainCategoriesController } from './controllers/main-categories.category.controller';
 
 const controllers: Type<any>[] = [
   AnalyticsController,
@@ -41,6 +42,7 @@ const controllers: Type<any>[] = [
   UserAssessmentsController,
   UserCoursesController,
   WishlistController,
+  MainCategoriesController,
 ];
 
 export default controllers;

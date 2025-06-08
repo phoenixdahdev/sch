@@ -19,6 +19,7 @@ import { UploadService } from './services/upload.service';
 import { UserAssessmentsService } from './services/user-assessments.service';
 import { UserCoursesService } from './services/user-courses.service';
 import { WishlistService } from './services/wishlist.service';
+import { MainCategoriesService } from './services/main-categories.service';
 
 export const services: Provider[] = [
   AnalyticsService,
@@ -41,4 +42,5 @@ export const services: Provider[] = [
   UserAssessmentsService,
   UserCoursesService,
   WishlistService,
+  MainCategoriesService,
 ];

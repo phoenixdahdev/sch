@@ -39,11 +39,13 @@ import {
   PromotionModelAction,
   WishListModelAction,
   NotificationModelAction,
+  MainCategoryModelAction,
 } from '../actions/model-actions';
 import controllers from './base.controller';
 import { services } from './base.service';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { HttpModule } from '@nestjs/axios';
+import { MainCategory } from '@entities/main-category.entity';
 
 @Module({
   imports: [
@@ -67,6 +69,7 @@ import { HttpModule } from '@nestjs/axios';
       WishList,
       Notification,
       CourseModules,
+      MainCategory,
     ]),
     HttpModule,
     EventEmitterModule.forRoot(),
@@ -92,6 +95,7 @@ import { HttpModule } from '@nestjs/axios';
     PromotionModelAction,
     WishListModelAction,
     NotificationModelAction,
+    MainCategoryModelAction,
   ],
   controllers: [...controllers],
   exports: [...services],

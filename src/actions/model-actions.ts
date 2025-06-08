@@ -21,6 +21,7 @@ import { Certificate } from '@entities/certificate.entity';
 import { Promotion } from '@entities/promotion.entity';
 import { WishList } from '@entities/wish_list.entity';
 import { Notification } from '@entities/notification.entity';
+import { MainCategory } from '../entities/main-category.entity';
 
 @Injectable()
 export class CategoryModelAction extends AbstractModelAction<Category> {
@@ -209,5 +210,15 @@ export class NotificationModelAction extends AbstractModelAction<Notification> {
     repository: Repository<Notification>,
   ) {
     super(repository, Notification);
+  }
+}
+
+@Injectable()
+export class MainCategoryModelAction extends AbstractModelAction<MainCategory> {
+  constructor(
+    @InjectRepository(MainCategory)
+    repository: Repository<MainCategory>,
+  ) {
+    super(repository, MainCategory);
   }
 }

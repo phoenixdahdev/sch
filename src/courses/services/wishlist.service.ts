@@ -18,13 +18,13 @@ export class WishlistService {
     private readonly wishListModelAction: WishListModelAction,
     private readonly courseModelAction: CourseModelAction,
     private readonly cartModelAction: CartModelAction,
-  ) {}
+  ) { }
 
   async getWishlist(userId: string) {
     const wishlist = await this.wishListModelAction.get(
       { user_id: userId },
       {},
-      { courses: true, 'courses.category': true },
+      ["course", 'course.category'],
     );
     if (!wishlist) {
       await this.wishListModelAction.create({
@@ -119,7 +119,7 @@ export class WishlistService {
         cart: await this.cartModelAction.get(
           { user_id: userId },
           {},
-          { items: true, 'items.course': true, 'items.course.category': true },
+          ["items", 'items.course', 'items.course.category'],
         ),
       },
       'Course moved to cart successfully',

@@ -20,13 +20,13 @@ export class CartService {
     private readonly userCourseModelAction: UserCourseModelAction,
     private readonly cartItemModelAction: CartItemModelAction,
     private readonly promotionModelAction: PromotionModelAction,
-  ) {}
+  ) { }
 
   async getCart(userId: string) {
     const cart = await this.cartModelAction.get(
       { user_id: userId },
       {},
-      { items: true, 'items.course': true, 'items.course.category': true },
+      ["items", 'items.course', 'items.course.category'],
     );
     if (!cart) {
       await this.cartModelAction.create({
@@ -43,7 +43,7 @@ export class CartService {
         cart: await this.cartModelAction.get(
           { user_id: userId },
           {},
-          { items: true, 'items.course': true, 'items.course.category': true },
+          ["items", 'items.course', 'items.course.category'],
         ),
       },
       'Cart retrieved successfully',

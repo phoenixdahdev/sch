@@ -20,6 +20,7 @@ import { Promotion } from '../entities/promotion.entity';
 import { WishList } from '../entities/wish_list.entity';
 import { Notification } from '../entities/notification.entity';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { MainCategory } from '../entities/main-category.entity';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
@@ -50,6 +51,7 @@ const dataSource = new DataSource({
     WishList,
     Notification,
     Module,
+    MainCategory,
   ],
   migrations: ['src/migrations/**/*.ts'],
   namingStrategy: new SnakeNamingStrategy(),

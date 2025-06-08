@@ -12,7 +12,7 @@ export class CertificateService {
   constructor(
     private readonly userCourseModelAction: UserCourseModelAction,
     private readonly certificateModelAction: CertificateModelAction,
-  ) {}
+  ) { }
 
   async findAll(findOptions: FindRecordGeneric<Partial<Certificate>>) {
     const certificates = await this.certificateModelAction.find(findOptions);
@@ -57,7 +57,7 @@ export class CertificateService {
     const certificate = await this.certificateModelAction.get(
       { verification_code: code },
       {},
-      { user_course: true, 'user_course.course': true },
+      ["user_course", 'user_course.course'],
     );
     if (!certificate || !certificate.is_valid) {
       return buildResponse({ isValid: false }, 'certificate is not valid');
