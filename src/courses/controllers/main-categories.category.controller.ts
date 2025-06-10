@@ -45,7 +45,7 @@ export class MainCategoriesController {
 
     @Post()
     @UseGuards(AuthGuard)
-    @Roles([UserType.Admin])
+    // @Roles([UserType.Admin])
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Create a main category (Admin only)' })
     async create(@Body() dto: CreateMainCategoryDto) {
@@ -72,7 +72,7 @@ export class MainCategoriesController {
 
     @Post('assign-category')
     @UseGuards(AuthGuard)
-    @Roles([UserType.Admin])
+    // @Roles([UserType.Admin])
     @ApiBearerAuth()
     @ApiOperation({
         summary: 'Assign a category to a main category (Admin only)',
@@ -83,7 +83,7 @@ export class MainCategoriesController {
 
     @Post('unassign-category/:categoryId')
     @UseGuards(AuthGuard)
-    @Roles([UserType.Admin])
+    // @Roles([UserType.Admin])
     @ApiBearerAuth()
     @ApiOperation({
         summary: 'Unassign a category from its main category (Admin only)',
