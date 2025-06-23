@@ -1,9 +1,10 @@
-import { Category } from '@entities/category.entity';
+
 import { buildResponse } from '@kemuko-org/shared-utils';
 import { CategoryModelAction } from '@/actions/model-actions';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto, UpdateCategoryDto } from '@dto/categories.dto';
 import ListRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/list-record-generic';
+import { Category } from '@kemuko-org/db-schemas';
 
 @Injectable()
 export class CategoriesService {

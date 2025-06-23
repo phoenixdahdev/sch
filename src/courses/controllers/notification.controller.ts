@@ -21,7 +21,7 @@ import {
   User,
 } from '@kemuko-org/shared-utils';
 import FindRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/find-record-generic';
-import { Notification } from '@entities/notification.entity';
+import { Notification } from '@kemuko-org/db-schemas';
 
 @ApiTags('notifications')
 @ApiBearerAuth()

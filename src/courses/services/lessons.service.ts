@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   LessonModelAction,
   ModuleModelAction,
 } from '../../actions/model-actions';
-import { CreateLessonDto, UpdateLessonDto } from '@dto/lessons.dto';
 import { buildResponse } from '@kemuko-org/shared-utils';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateLessonDto, UpdateLessonDto } from '@dto/lessons.dto';
 
 @Injectable()
 export class LessonsService {

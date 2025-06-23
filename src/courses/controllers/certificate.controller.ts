@@ -1,24 +1,24 @@
 import {
-  AuthGuard,
-  CurrentUser,
-  PaginationValidator,
-  User,
-} from '@kemuko-org/shared-utils';
-import { Controller, Get, Param, UseGuards, Query } from '@nestjs/common';
-import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import {
+  AuthGuard,
+  CurrentUser,
+  PaginationValidator,
+  User,
+} from '@kemuko-org/shared-utils';
 import { CertificateService } from '../services/certificate.service';
+import { Controller, Get, Param, UseGuards, Query } from '@nestjs/common';
 import FindRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/find-record-generic';
-import { Certificate } from '@entities/certificate.entity';
+import { Certificate } from '@kemuko-org/db-schemas';
 
 @ApiTags('certificates')
 @Controller('certificates')
 export class CertificateController {
-  constructor(private readonly certificateService: CertificateService) {}
+  constructor(private readonly certificateService: CertificateService) { }
 
   @Get()
   @UseGuards(AuthGuard)

@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Certificate } from '@entities/certificate.entity';
 import {
   UserCourseModelAction,
   CertificateModelAction,
 } from '@/actions/model-actions';
-import FindRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/find-record-generic';
+import { Certificate } from '@kemuko-org/db-schemas';
 import { buildResponse } from '@kemuko-org/shared-utils';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import FindRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/find-record-generic';
 
 @Injectable()
 export class CertificateService {
@@ -57,7 +57,7 @@ export class CertificateService {
     const certificate = await this.certificateModelAction.get(
       { verification_code: code },
       {},
-      ["user_course", 'user_course.course'],
+      ['user_course', 'user_course.course'],
     );
     if (!certificate || !certificate.is_valid) {
       return buildResponse({ isValid: false }, 'certificate is not valid');

@@ -5,13 +5,13 @@ import {
 } from '@kemuko-org/shared-utils';
 import { DataSource } from 'typeorm';
 import { AppService } from './app.service';
-import dataSource from '@database/datasource';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CourseModule } from './courses/course.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Logger, Module, OnModuleInit } from '@nestjs/common';
+import { dbNames, typeOrmConfig } from '@kemuko-org/db-schemas';
+import { InjectDataSource, TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -19,23 +19,18 @@ import { CourseModule } from './courses/course.module';
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: () => {
-        return dataSource.options;
-      },
-      dataSourceFactory: async (options) => {
-        const logger = new Logger('Database');
-        const dataSource = new DataSource(options);
-        try {
-          if (!dataSource.isInitialized) {
-            await dataSource.initialize();
-            logger.log('🚀 Data Source has been initialized!');
-          }
-          return dataSource;
-        } catch (error) {
-          logger.error('Error during Data Source initialization', error);
-          throw error;
-        }
-      },
+      name: dbNames.USER,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) =>
+        typeOrmConfig(dbNames.USER, config),
+    }),
+    TypeOrmModule.forRootAsync({
+      name: dbNames.COURSE,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) =>
+        typeOrmConfig(dbNames.COURSE, config),
     }),
     ErrorHandlingModule.registerGlobal({
       includeStacktrace: process.env.NODE_ENV !== 'production',
@@ -67,4 +62,18 @@ import { CourseModule } from './courses/course.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  private readonly logger = new Logger(AppModule.name);
+  constructor(
+    @InjectDataSource(dbNames.USER) private readonly userDb: DataSource,
+    @InjectDataSource(dbNames.COURSE)
+    private readonly coursesDb: DataSource,
+  ) {}
+
+  onModuleInit() {
+    this.logger.log(`✅ USER_DB initialized: ${this.userDb.isInitialized}`);
+    this.logger.log(
+      `✅ COURSES_DB initialized: ${this.coursesDb.isInitialized}`,
+    );
+  }
+}

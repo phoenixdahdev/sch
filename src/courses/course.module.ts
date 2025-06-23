@@ -1,24 +1,26 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Category } from '@entities/category.entity';
-import { Course } from '@entities/course.entity';
-import { Module as CourseModules } from '@entities/module.entity';
-import { Lesson } from '@entities/lesson.entity';
-import { Material } from '@entities/material.entity';
-import { Assessment } from '@entities/assessment.entity';
-import { Question } from '@entities/question.entity';
-import { Option } from '@entities/option.entity';
-import { UserCourse } from '@entities/user_course.entity';
-import { UserProgress } from '@entities/user_progress.entity';
-import { UserAssessment } from '@entities/user_assessment.entity';
-import { Review } from '@entities/review.entity';
-import { Cart } from '@entities/cart.entity';
-import { CartItem } from '@entities/cart_item.entity';
-import { PaymentIntent } from '@entities/payment_intent.entity';
-import { Certificate } from '@entities/certificate.entity';
-import { Promotion } from '@entities/promotion.entity';
-import { WishList } from '@entities/wish_list.entity';
-import { Notification } from '@entities/notification.entity';
+import {
+  Assessment,
+  Cart,
+  CartItem,
+  Category,
+  Certificate,
+  Course,
+  dbNames,
+  Lesson,
+  MainCategory,
+  Material,
+  Module as CourseModules,
+  Notification,
+  Option,
+  PaymentIntent,
+  Promotion,
+  Question,
+  Review,
+  UserAssessment,
+  UserCourse,
+  UserProgress,
+  WishList,
+} from '@kemuko-org/db-schemas';
 import {
   CategoryModelAction,
   CourseModelAction,
@@ -41,11 +43,12 @@ import {
   NotificationModelAction,
   MainCategoryModelAction,
 } from '../actions/model-actions';
-import controllers from './base.controller';
+import { Module } from '@nestjs/common';
 import { services } from './base.service';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 import { HttpModule } from '@nestjs/axios';
-import { MainCategory } from '@entities/main-category.entity';
+import controllers from './base.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -70,7 +73,7 @@ import { MainCategory } from '@entities/main-category.entity';
       Notification,
       CourseModules,
       MainCategory,
-    ]),
+    ], dbNames.COURSE),
     HttpModule,
     EventEmitterModule.forRoot(),
   ],
@@ -100,4 +103,4 @@ import { MainCategory } from '@entities/main-category.entity';
   controllers: [...controllers],
   exports: [...services],
 })
-export class CourseModule {}
+export class CourseModule { }

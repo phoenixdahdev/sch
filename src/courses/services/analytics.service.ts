@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Course } from '@entities/course.entity';
-import { UserCourse } from '@entities/user_course.entity';
-import { UserProgress } from '@entities/user_progress.entity';
-import { Review } from '@entities/review.entity';
-import { PaymentIntent } from '@entities/payment_intent.entity';
+
 import { buildResponse } from '@kemuko-org/shared-utils';
+import { Course, PaymentIntent, Review, UserCourse, UserProgress } from '@kemuko-org/db-schemas';
 
 @Injectable()
 export class AnalyticsService {

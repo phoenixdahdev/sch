@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck 
 import {
   Controller,
   Get,
@@ -13,14 +13,13 @@ import {
   Request,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { UserProgressService } from '../services/user-progress.service';
-import { UpdateProgressDto } from '../dtos/user-progress.dto';
-import { AuthGuard } from '../guards/auth.guard';
+import { AuthGuard } from '@kemuko-org/shared-utils';
+import { UpdateProgressDto } from '@dto/user-progress.dto';
 
 @ApiTags('user-progress')
 @Controller('user-progress')
 export class UserProgressController {
-  constructor(private readonly userProgressService: UserProgressService) {}
+  constructor(private readonly userProgressService: UserProgressService) { }
 
   @Get(':courseId')
   @UseGuards(AuthGuard)

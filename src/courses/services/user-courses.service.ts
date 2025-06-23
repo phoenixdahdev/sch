@@ -27,13 +27,13 @@ export class UserCoursesService {
     private readonly userCourseModelAction: UserCourseModelAction,
     private readonly courseModelAction: CourseModelAction,
     private readonly certificateModelAction: CertificateModelAction,
-  ) { }
+  ) {}
 
   async findAll(listOption: ListRecordGeneric<Partial<UserCourse>>) {
     const { payload, paginationMeta } = await this.userCourseModelAction.list({
       filterRecordOptions: listOption.filterRecordOptions,
       paginationPayload: listOption.paginationPayload,
-      relations: ["course", 'course.category'],
+      relations: ['course', 'course.category'],
     });
 
     return {
@@ -47,7 +47,7 @@ export class UserCoursesService {
     const userCourse = await this.userCourseModelAction.get(
       { user_id: userId, course_id: courseId },
       {},
-      ["course", 'course.category'],
+      ['course', 'course.category'],
     );
 
     if (!userCourse) {

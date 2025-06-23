@@ -1,14 +1,13 @@
-import { Course } from '@entities/course.entity';
-import { Review } from '@entities/review.entity';
-import { CreateCourseDto, UpdateCourseDto } from '@dto/courses.dto';
-import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   CourseModelAction,
   ReviewModelAction,
 } from '../../actions/model-actions';
+import { CreateCourseDto, UpdateCourseDto } from '@dto/courses.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import ListRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/list-record-generic';
 import { buildResponse } from '@kemuko-org/shared-utils';
 import { ILike } from 'typeorm';
+import { Course, Review } from '@kemuko-org/db-schemas';
 
 @Injectable()
 export class CoursesService {

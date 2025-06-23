@@ -6,15 +6,15 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { WishlistService } from '../services/wishlist.service';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard, CurrentUser, User } from '@kemuko-org/shared-utils';
 
 @ApiTags('wishlist')
 @ApiBearerAuth()
 @Controller('wishlist')
 export class WishlistController {
-  constructor(private readonly wishlistService: WishlistService) {}
+  constructor(private readonly wishlistService: WishlistService) { }
 
   @Get()
   @UseGuards(AuthGuard)

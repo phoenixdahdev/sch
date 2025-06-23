@@ -6,15 +6,6 @@ import {
   User,
   UserType,
 } from '@kemuko-org/shared-utils';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
-import { CoursesService } from '../services/course.service';
-import {
-  CourseFilterDto,
-  CourseSortBy,
-  CreateCourseDto,
-  SortDirection,
-  UpdateCourseDto,
-} from '@dto/courses.dto';
 import {
   Controller,
   Get,
@@ -26,14 +17,22 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
-import { Course } from '@entities/course.entity';
+import {
+  CourseFilterDto,
+  CourseSortBy,
+  CreateCourseDto,
+  SortDirection,
+  UpdateCourseDto,
+} from '@dto/courses.dto';
+import { CoursesService } from '../services/course.service';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { Course, Review } from '@kemuko-org/db-schemas';
 import ListRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/list-record-generic';
-import { Review } from '@entities/review.entity';
 
 @ApiTags('courses')
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(private readonly coursesService: CoursesService) { }
 
   @Get()
   @ApiOperation({

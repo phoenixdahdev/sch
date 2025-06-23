@@ -18,21 +18,21 @@ import {
   ApiBody,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { PromotionService } from '../services/promotion.service';
 import {
   AuthGuard,
   PaginationValidator,
   Roles,
   UserType,
 } from '@kemuko-org/shared-utils';
-import ListRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/list-record-generic';
-import { Promotion } from '@entities/promotion.entity';
+import { Promotion } from '@kemuko-org/db-schemas';
+import { PromotionService } from '../services/promotion.service';
 import { CreatePromotionDto, UpdatePromotionDto } from '@dto/promotion.dto';
+import ListRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/list-record-generic';
 
 @ApiTags('promotions')
 @Controller('promotions')
 export class PromotionController {
-  constructor(private readonly promotionService: PromotionService) {}
+  constructor(private readonly promotionService: PromotionService) { }
 
   @Get()
   @UseGuards(AuthGuard)

@@ -2,31 +2,34 @@ import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AbstractModelAction } from '@kemuko-org/shared-utils';
-import { Category } from '@entities/category.entity';
-import { Course } from '@entities/course.entity';
-import { Option } from '@entities/option.entity';
-import { Module } from '@entities/module.entity';
-import { Lesson } from '@entities/lesson.entity';
-import { Material } from '@entities/material.entity';
-import { Assessment } from '@entities/assessment.entity';
-import { Question } from '@entities/question.entity';
-import { UserCourse } from '@entities/user_course.entity';
-import { UserProgress } from '@entities/user_progress.entity';
-import { UserAssessment } from '@entities/user_assessment.entity';
-import { Review } from '@entities/review.entity';
-import { Cart } from '@entities/cart.entity';
-import { CartItem } from '@entities/cart_item.entity';
-import { PaymentIntent } from '@entities/payment_intent.entity';
-import { Certificate } from '@entities/certificate.entity';
-import { Promotion } from '@entities/promotion.entity';
-import { WishList } from '@entities/wish_list.entity';
-import { Notification } from '@entities/notification.entity';
-import { MainCategory } from '../entities/main-category.entity';
+import {
+  Assessment,
+  Cart,
+  CartItem,
+  Category,
+  Certificate,
+  Course,
+  dbNames,
+  Lesson,
+  MainCategory,
+  Material,
+  Module,
+  Notification,
+  Option,
+  PaymentIntent,
+  Promotion,
+  Question,
+  Review,
+  UserAssessment,
+  UserCourse,
+  UserProgress,
+  WishList,
+} from '@kemuko-org/db-schemas';
 
 @Injectable()
 export class CategoryModelAction extends AbstractModelAction<Category> {
   constructor(
-    @InjectRepository(Category)
+    @InjectRepository(Category, dbNames.COURSE)
     repository: Repository<Category>,
   ) {
     super(repository, Category);
@@ -36,7 +39,7 @@ export class CategoryModelAction extends AbstractModelAction<Category> {
 @Injectable()
 export class CourseModelAction extends AbstractModelAction<Course> {
   constructor(
-    @InjectRepository(Course)
+    @InjectRepository(Course, dbNames.COURSE)
     repository: Repository<Course>,
   ) {
     super(repository, Course);
@@ -46,7 +49,7 @@ export class CourseModelAction extends AbstractModelAction<Course> {
 @Injectable()
 export class ModuleModelAction extends AbstractModelAction<Module> {
   constructor(
-    @InjectRepository(Module)
+    @InjectRepository(Module, dbNames.COURSE)
     repository: Repository<Module>,
   ) {
     super(repository, Module);
@@ -56,7 +59,7 @@ export class ModuleModelAction extends AbstractModelAction<Module> {
 @Injectable()
 export class LessonModelAction extends AbstractModelAction<Lesson> {
   constructor(
-    @InjectRepository(Lesson)
+    @InjectRepository(Lesson, dbNames.COURSE)
     repository: Repository<Lesson>,
   ) {
     super(repository, Lesson);
@@ -66,7 +69,7 @@ export class LessonModelAction extends AbstractModelAction<Lesson> {
 @Injectable()
 export class MaterialModelAction extends AbstractModelAction<Material> {
   constructor(
-    @InjectRepository(Material)
+    @InjectRepository(Material, dbNames.COURSE)
     repository: Repository<Material>,
   ) {
     super(repository, Material);
@@ -76,7 +79,7 @@ export class MaterialModelAction extends AbstractModelAction<Material> {
 @Injectable()
 export class AssessmentModelAction extends AbstractModelAction<Assessment> {
   constructor(
-    @InjectRepository(Assessment)
+    @InjectRepository(Assessment, dbNames.COURSE)
     repository: Repository<Assessment>,
   ) {
     super(repository, Assessment);
@@ -86,7 +89,7 @@ export class AssessmentModelAction extends AbstractModelAction<Assessment> {
 @Injectable()
 export class QuestionModelAction extends AbstractModelAction<Question> {
   constructor(
-    @InjectRepository(Question)
+    @InjectRepository(Question, dbNames.COURSE)
     repository: Repository<Question>,
   ) {
     super(repository, Question);
@@ -96,7 +99,7 @@ export class QuestionModelAction extends AbstractModelAction<Question> {
 @Injectable()
 export class OptionModelAction extends AbstractModelAction<Option> {
   constructor(
-    @InjectRepository(Option)
+    @InjectRepository(Option, dbNames.COURSE)
     repository: Repository<Option>,
   ) {
     super(repository, Option);
@@ -106,7 +109,7 @@ export class OptionModelAction extends AbstractModelAction<Option> {
 @Injectable()
 export class UserCourseModelAction extends AbstractModelAction<UserCourse> {
   constructor(
-    @InjectRepository(UserCourse)
+    @InjectRepository(UserCourse, dbNames.COURSE)
     repository: Repository<UserCourse>,
   ) {
     super(repository, UserCourse);
@@ -116,7 +119,7 @@ export class UserCourseModelAction extends AbstractModelAction<UserCourse> {
 @Injectable()
 export class UserProgressModelAction extends AbstractModelAction<UserProgress> {
   constructor(
-    @InjectRepository(UserProgress)
+    @InjectRepository(UserProgress, dbNames.COURSE)
     repository: Repository<UserProgress>,
   ) {
     super(repository, UserProgress);
@@ -126,7 +129,7 @@ export class UserProgressModelAction extends AbstractModelAction<UserProgress> {
 @Injectable()
 export class UserAssessmentModelAction extends AbstractModelAction<UserAssessment> {
   constructor(
-    @InjectRepository(UserAssessment)
+    @InjectRepository(UserAssessment, dbNames.COURSE)
     repository: Repository<UserAssessment>,
   ) {
     super(repository, UserAssessment);
@@ -136,7 +139,7 @@ export class UserAssessmentModelAction extends AbstractModelAction<UserAssessmen
 @Injectable()
 export class ReviewModelAction extends AbstractModelAction<Review> {
   constructor(
-    @InjectRepository(Review)
+    @InjectRepository(Review, dbNames.COURSE)
     repository: Repository<Review>,
   ) {
     super(repository, Review);
@@ -146,7 +149,7 @@ export class ReviewModelAction extends AbstractModelAction<Review> {
 @Injectable()
 export class CartModelAction extends AbstractModelAction<Cart> {
   constructor(
-    @InjectRepository(Cart)
+    @InjectRepository(Cart, dbNames.COURSE)
     repository: Repository<Cart>,
   ) {
     super(repository, Cart);
@@ -156,7 +159,7 @@ export class CartModelAction extends AbstractModelAction<Cart> {
 @Injectable()
 export class CartItemModelAction extends AbstractModelAction<CartItem> {
   constructor(
-    @InjectRepository(CartItem)
+    @InjectRepository(CartItem, dbNames.COURSE)
     repository: Repository<CartItem>,
   ) {
     super(repository, CartItem);
@@ -166,7 +169,7 @@ export class CartItemModelAction extends AbstractModelAction<CartItem> {
 @Injectable()
 export class PaymentIntentModelAction extends AbstractModelAction<PaymentIntent> {
   constructor(
-    @InjectRepository(PaymentIntent)
+    @InjectRepository(PaymentIntent, dbNames.COURSE)
     repository: Repository<PaymentIntent>,
   ) {
     super(repository, PaymentIntent);
@@ -176,7 +179,7 @@ export class PaymentIntentModelAction extends AbstractModelAction<PaymentIntent>
 @Injectable()
 export class CertificateModelAction extends AbstractModelAction<Certificate> {
   constructor(
-    @InjectRepository(Certificate)
+    @InjectRepository(Certificate, dbNames.COURSE)
     repository: Repository<Certificate>,
   ) {
     super(repository, Certificate);
@@ -186,7 +189,7 @@ export class CertificateModelAction extends AbstractModelAction<Certificate> {
 @Injectable()
 export class PromotionModelAction extends AbstractModelAction<Promotion> {
   constructor(
-    @InjectRepository(Promotion)
+    @InjectRepository(Promotion, dbNames.COURSE)
     repository: Repository<Promotion>,
   ) {
     super(repository, Promotion);
@@ -196,7 +199,7 @@ export class PromotionModelAction extends AbstractModelAction<Promotion> {
 @Injectable()
 export class WishListModelAction extends AbstractModelAction<WishList> {
   constructor(
-    @InjectRepository(WishList)
+    @InjectRepository(WishList, dbNames.COURSE)
     repository: Repository<WishList>,
   ) {
     super(repository, WishList);
@@ -206,7 +209,7 @@ export class WishListModelAction extends AbstractModelAction<WishList> {
 @Injectable()
 export class NotificationModelAction extends AbstractModelAction<Notification> {
   constructor(
-    @InjectRepository(Notification)
+    @InjectRepository(Notification, dbNames.COURSE)
     repository: Repository<Notification>,
   ) {
     super(repository, Notification);
@@ -216,7 +219,7 @@ export class NotificationModelAction extends AbstractModelAction<Notification> {
 @Injectable()
 export class MainCategoryModelAction extends AbstractModelAction<MainCategory> {
   constructor(
-    @InjectRepository(MainCategory)
+    @InjectRepository(MainCategory, dbNames.COURSE)
     repository: Repository<MainCategory>,
   ) {
     super(repository, MainCategory);

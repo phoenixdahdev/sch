@@ -7,10 +7,10 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
+import { UserCourseQueryDto } from '@dto/user-course-query.dto';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UserCoursesService } from '../services/user-courses.service';
 import { AuthGuard, CurrentUser, User } from '@kemuko-org/shared-utils';
-import { UserCourseQueryDto } from '@dto/user-course-query.dto';
 
 @ApiTags('user-courses')
 @ApiBearerAuth()
