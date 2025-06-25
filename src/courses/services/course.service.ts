@@ -100,25 +100,38 @@ export class CoursesService {
     options: ListRecordGeneric<Partial<Course>>,
   ) {
     const { filterRecordOptions, paginationPayload, order } = options;
+
+    // Create OR conditions
     const searchConditions = [
-      { ...filterRecordOptions, title: ILike(`%${searchTerm}%`) },
-      { ...filterRecordOptions, description: ILike(`%${searchTerm}%`) },
-      { ...filterRecordOptions, about: ILike(`%${searchTerm}%`) },
+      {
+        ...filterRecordOptions,
+        is_published: true,
+        title: ILike(`%${searchTerm}%`),
+      },
+      {
+        ...filterRecordOptions,
+        is_published: true,
+        description: ILike(`%${searchTerm}%`),
+      },
+      {
+        ...filterRecordOptions,
+        is_published: true,
+        about: ILike(`%${searchTerm}%`),
+      },
     ];
 
     const { payload, paginationMeta } = await this.courseModelAction.list({
-      filterRecordOptions: {
-        ...searchConditions,
-        is_published: true,
-      },
+      filterRecordOptions: searchConditions,
       paginationPayload,
       order,
       relations: { category: true },
     });
+
     return {
       data: { courses: payload },
-      message: 'Courses have been retrived successfully',
+      message: 'Courses have been retrieved successfully',
       meta: paginationMeta,
     };
   }
+
 }

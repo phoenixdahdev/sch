@@ -83,7 +83,7 @@ export class CoursesController {
       order: { [sortBy]: sortDirection },
     };
     if (search) {
-      return this.coursesService.searchCourses(search, listOptions);
+      return this.coursesService.searchCourses(search.toLocaleLowerCase(), listOptions);
     }
     return this.coursesService.findAll(listOptions);
   }
