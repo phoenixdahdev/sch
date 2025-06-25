@@ -1,5 +1,4 @@
 import { In } from 'typeorm';
-import { Promotion } from '@entities/promotion.entity';
 import { buildResponse } from '@kemuko-org/shared-utils';
 import { CreatePromotionDto, UpdatePromotionDto } from '@dto/promotion.dto';
 import {
@@ -12,6 +11,7 @@ import {
   CourseModelAction,
 } from '../../actions/model-actions';
 import ListRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/list-record-generic';
+import { Promotion } from '@kemuko-org/db-schemas';
 
 @Injectable()
 export class PromotionService {

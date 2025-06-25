@@ -49,6 +49,7 @@ import { HttpModule } from '@nestjs/axios';
 import controllers from './base.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AutoSeedingService } from 'src/seed';
 
 @Module({
   imports: [
@@ -99,6 +100,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     WishListModelAction,
     NotificationModelAction,
     MainCategoryModelAction,
+    AutoSeedingService
   ],
   controllers: [...controllers],
   exports: [...services],

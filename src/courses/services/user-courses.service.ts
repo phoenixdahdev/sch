@@ -5,29 +5,28 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserCourse } from '@entities/user_course.entity';
-import { Lesson } from '@entities/lesson.entity';
 import { v4 as uuidv4 } from 'uuid';
 import {
   CourseModelAction,
   UserCourseModelAction,
   CertificateModelAction,
 } from '../../actions/model-actions';
+
 import ListRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/list-record-generic';
 import { buildResponse, User } from '@kemuko-org/shared-utils';
-import { UserProgress } from '@entities/user_progress.entity';
+import { Lesson, UserCourse, UserProgress, dbNames } from '@kemuko-org/db-schemas';
 
 @Injectable()
 export class UserCoursesService {
   constructor(
-    @InjectRepository(UserProgress)
+    @InjectRepository(UserProgress, dbNames.COURSE)
     private userProgressRepository: Repository<UserProgress>,
-    @InjectRepository(Lesson)
+    @InjectRepository(Lesson, dbNames.COURSE)
     private lessonRepository: Repository<Lesson>,
     private readonly userCourseModelAction: UserCourseModelAction,
     private readonly courseModelAction: CourseModelAction,
     private readonly certificateModelAction: CertificateModelAction,
-  ) {}
+  ) { }
 
   async findAll(listOption: ListRecordGeneric<Partial<UserCourse>>) {
     const { payload, paginationMeta } = await this.userCourseModelAction.list({

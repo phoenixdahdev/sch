@@ -1,18 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { Course } from '@entities/course.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from '@entities/category.entity';
 import { Repository, Like, In, FindOptionsWhere } from 'typeorm';
 import { SearchQueryDto, AdvancedSearchDto } from '@dto/search.dto';
+import { Category, Course, dbNames } from '@kemuko-org/db-schemas';
 
 @Injectable()
 export class SearchService {
   constructor(
-    @InjectRepository(Course)
+    @InjectRepository(Course, dbNames.COURSE)
     private courseRepository: Repository<Course>,
-    @InjectRepository(Category)
+    @InjectRepository(Category, dbNames.COURSE)
     private categoryRepository: Repository<Category>,
-  ) {}
+  ) { }
 
   async search(query: SearchQueryDto) {
     const limit = query.limit || 10;
@@ -21,9 +20,9 @@ export class SearchService {
     const searchTerm = query.term || '';
 
     let whereCondition: FindOptionsWhere<Course>[] | FindOptionsWhere<Course> =
-      {
-        is_published: true,
-      };
+    {
+      is_published: true,
+    };
 
     if (searchTerm) {
       whereCondition = [
@@ -90,9 +89,9 @@ export class SearchService {
     const skip = (page - 1) * limit;
 
     let whereCondition: FindOptionsWhere<Course>[] | FindOptionsWhere<Course> =
-      {
-        is_published: true,
-      };
+    {
+      is_published: true,
+    };
 
     if (query.term) {
       whereCondition = [
@@ -106,9 +105,9 @@ export class SearchService {
 
       whereCondition = Array.isArray(whereCondition)
         ? whereCondition.map((cond) => ({
-            ...cond,
-            category_id: In(categoryIds),
-          }))
+          ...cond,
+          category_id: In(categoryIds),
+        }))
         : { ...whereCondition, category_id: In(categoryIds) };
     }
 
@@ -135,9 +134,9 @@ export class SearchService {
     if (query.rating_min) {
       whereCondition = Array.isArray(whereCondition)
         ? whereCondition.map((cond) => ({
-            ...cond,
-            average_rating: In([query.rating_min]),
-          }))
+          ...cond,
+          average_rating: In([query.rating_min]),
+        }))
         : { ...whereCondition, average_rating: In([query.rating_min]) };
     }
 

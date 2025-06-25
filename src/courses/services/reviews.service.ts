@@ -3,13 +3,13 @@ import {
   NotFoundException,
   ForbiddenException,
   BadRequestException,
-} from '@nestjs/common';
-import { Review } from '@entities/review.entity';
+} from '@nestjs/common';;
 import { CourseModelAction, ReviewModelAction } from '@/actions/model-actions';
 import ListRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/list-record-generic';
 import { CreateReviewDto, UpdateReviewDto } from '@dto/reviews.dto';
 import { UserCourseModelAction } from '../../actions/model-actions';
 import { buildResponse } from '@kemuko-org/shared-utils';
+import { Review } from '@kemuko-org/db-schemas';
 
 @Injectable()
 export class ReviewsService {

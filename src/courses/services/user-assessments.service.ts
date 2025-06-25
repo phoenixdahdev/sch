@@ -5,25 +5,22 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserAssessment } from '@entities/user_assessment.entity';
-import { UserCourse } from '@entities/user_course.entity';
-import { Assessment } from '@entities/assessment.entity';
-import { Question } from '@entities/question.entity';
 import { SubmitAssessmentDto } from '@dto/user-assessments.dto';
 import { buildResponse } from '@kemuko-org/shared-utils';
+import { Assessment, dbNames, Question, UserAssessment, UserCourse } from '@kemuko-org/db-schemas';
 
 @Injectable()
 export class UserAssessmentsService {
   constructor(
-    @InjectRepository(UserAssessment)
+    @InjectRepository(UserAssessment, dbNames.COURSE)
     private userAssessmentRepository: Repository<UserAssessment>,
-    @InjectRepository(UserCourse)
+    @InjectRepository(UserCourse, dbNames.COURSE)
     private userCourseRepository: Repository<UserCourse>,
-    @InjectRepository(Assessment)
+    @InjectRepository(Assessment, dbNames.COURSE)
     private assessmentRepository: Repository<Assessment>,
-    @InjectRepository(Question)
+    @InjectRepository(Question, dbNames.COURSE)
     private questionRepository: Repository<Question>,
-  ) {}
+  ) { }
 
   async getCourseAssessments(userId: string, courseId: string) {
     const userCourse = await this.userCourseRepository.findOne({

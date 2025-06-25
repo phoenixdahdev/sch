@@ -1,24 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { buildResponse } from '@kemuko-org/shared-utils';
-import { Course, PaymentIntent, Review, UserCourse, UserProgress } from '@kemuko-org/db-schemas';
+import { Course, dbNames, PaymentIntent, Review, UserCourse, UserProgress } from '@kemuko-org/db-schemas';
 
 @Injectable()
 export class AnalyticsService {
   constructor(
-    @InjectRepository(Course)
+    @InjectRepository(Course, dbNames.COURSE)
     private courseRepository: Repository<Course>,
-    @InjectRepository(UserCourse)
+    @InjectRepository(UserCourse, dbNames.COURSE)
     private userCourseRepository: Repository<UserCourse>,
-    @InjectRepository(UserProgress)
+    @InjectRepository(UserProgress, dbNames.COURSE)
     private userProgressRepository: Repository<UserProgress>,
-    @InjectRepository(Review)
+    @InjectRepository(Review, dbNames.COURSE)
     private reviewRepository: Repository<Review>,
-    @InjectRepository(PaymentIntent)
+    @InjectRepository(PaymentIntent, dbNames.COURSE)
     private paymentIntentRepository: Repository<PaymentIntent>,
-  ) {}
+  ) { }
 
   async getCreatorCourseAnalytics(userId: string, period: string = '30d') {
     const startDate = this.getStartDateFromPeriod(period);
@@ -135,7 +134,7 @@ export class AnalyticsService {
     const averageRating =
       reviews.length > 0
         ? reviews.reduce((sum, review) => sum + Number(review.rating), 0) /
-          reviews.length
+        reviews.length
         : 0;
 
     const revenue = await this.paymentIntentRepository
@@ -379,8 +378,8 @@ export class AnalyticsService {
     const passRate =
       assessmentResults.length > 0
         ? (assessmentResults.filter((r) => r.is_passed).length /
-            assessmentResults.length) *
-          100
+          assessmentResults.length) *
+        100
         : 0;
 
     return buildResponse(

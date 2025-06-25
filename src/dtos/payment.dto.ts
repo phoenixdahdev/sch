@@ -1,4 +1,5 @@
-import { Currency } from '@entities/payment_intent.entity';
+
+import { Currency } from '@kemuko-org/db-schemas';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsString,

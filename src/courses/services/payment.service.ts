@@ -4,6 +4,7 @@ import {
   BadRequestException,
   Logger,
   InternalServerErrorException,
+  Inject,
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import {
@@ -14,12 +15,13 @@ import {
 import { PaymentIntentModelAction } from '../../actions/model-actions';
 import { buildResponse, User } from '@kemuko-org/shared-utils';
 import { CreatePaymentIntentDto } from '@dto/payment.dto';
-import { PaymentIntentStatus } from '@entities/payment_intent.entity';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import * as crypto from 'crypto';
 import { PaystackWebhookEventData, WebHookData } from '@/types/index';
+import { dbNames, PaymentIntentStatus } from '@kemuko-org/db-schemas';
+import { getDataSourceToken } from '@nestjs/typeorm';
 
 interface PaymentIntentMetadata {
   paystack_reference?: string;
@@ -33,6 +35,7 @@ export class PaymentService {
   private readonly paystackSecretKey: string;
 
   constructor(
+    @Inject(getDataSourceToken(dbNames.COURSE))
     private readonly dataSource: DataSource,
     private readonly userCourseModelAction: UserCourseModelAction,
     private readonly cartModelAction: CartModelAction,

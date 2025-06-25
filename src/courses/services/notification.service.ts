@@ -1,14 +1,14 @@
+import { Notification } from '@kemuko-org/db-schemas';
+import { buildResponse } from '@kemuko-org/shared-utils';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Notification } from '@entities/notification.entity';
 import { NotificationModelAction } from '../../actions/model-actions';
 import FindRecordGeneric from '@kemuko-org/shared-utils/dist/database/options/find-record-generic';
-import { buildResponse } from '@kemuko-org/shared-utils';
 
 @Injectable()
 export class NotificationService {
   constructor(
     private readonly notificationModelAction: NotificationModelAction,
-  ) {}
+  ) { }
 
   async findAll(findOptions: FindRecordGeneric<Partial<Notification>>) {
     const notifications = await this.notificationModelAction.find(findOptions);
