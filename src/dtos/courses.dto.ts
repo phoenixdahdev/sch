@@ -42,14 +42,12 @@ export class CreateCourseDto {
   @IsNotEmpty()
   description: string;
 
-  @ApiPropertyOptional({
-    description: 'About the course (detailed description)',
-  })
+  @ApiPropertyOptional({ description: 'Detailed description (about)' })
   @IsString()
   @IsOptional()
   about?: string;
 
-  @ApiPropertyOptional({ description: 'Course thumbnail URL' })
+  @ApiPropertyOptional({ description: 'Thumbnail URL' })
   @IsString()
   @IsOptional()
   thumbnail_url?: string;
@@ -59,7 +57,7 @@ export class CreateCourseDto {
   @IsOptional()
   preview_video_url?: string;
 
-  @ApiProperty({ description: 'Course price', default: 0 })
+  @ApiProperty({ description: 'Price', default: 0 })
   @IsNumber()
   @Min(0)
   @Type(() => Number)
@@ -78,19 +76,18 @@ export class CreateCourseDto {
   total_hours?: number;
 
   @ApiPropertyOptional({
-    description: 'Course difficulty level',
-    enum: CourseLevel,
+    description: 'Course level (Beginner, Intermediate, Advanced)',
   })
-  @IsEnum(CourseLevel)
+  @IsString()
   @IsOptional()
-  level?: CourseLevel;
+  level?: string;
 
   @ApiProperty({ description: 'Category ID' })
   @IsUUID()
   @IsNotEmpty()
   category_id: string;
 
-  @ApiProperty({ description: 'Creator ID (User ID of the course creator)' })
+  @ApiProperty({ description: 'Creator ID' })
   @IsUUID()
   @IsNotEmpty()
   creator_id: string;
@@ -100,20 +97,20 @@ export class CreateCourseDto {
   @IsOptional()
   creator_name?: string;
 
-  @ApiPropertyOptional({ description: 'Is the course published', default: true })
+  @ApiPropertyOptional({ description: 'Is published', default: true })
   @IsBoolean()
   @IsOptional()
   is_published?: boolean;
 
-  @ApiPropertyOptional({ description: 'Is the course featured', default: false })
+  @ApiPropertyOptional({ description: 'Is featured', default: false })
   @IsBoolean()
   @IsOptional()
   is_featured?: boolean;
 
   @ApiPropertyOptional({
-    description: 'Format types available for the course',
+    description: 'Course format types (e.g. video, text)',
     type: [String],
-    example: ['video', 'text', 'audio'],
+    example: ['video', 'text'],
   })
   @IsArray()
   @IsString({ each: true })
@@ -121,7 +118,7 @@ export class CreateCourseDto {
   format_types?: string[];
 
   @ApiPropertyOptional({
-    description: 'Is flexible learning enabled',
+    description: 'Flexible learning enabled',
     default: true,
   })
   @IsBoolean()
@@ -129,7 +126,7 @@ export class CreateCourseDto {
   is_flexible_learning?: boolean;
 
   @ApiPropertyOptional({
-    description: 'Number of resources in the course',
+    description: 'Number of resources',
     default: 0,
   })
   @IsNumber()
@@ -139,9 +136,9 @@ export class CreateCourseDto {
   resource_count?: number;
 
   @ApiPropertyOptional({
-    description: 'Skills that will be learned in this course',
+    description: 'Skills taught in the course',
     type: [String],
-    example: ['JavaScript', 'React', 'Node.js'],
+    example: ['JavaScript', 'React'],
   })
   @IsArray()
   @IsString({ each: true })
@@ -149,20 +146,23 @@ export class CreateCourseDto {
   skills?: string[];
 
   @ApiPropertyOptional({
-    description: 'Learning outcomes of the course',
-    type: 'string',
+    description: 'Learning outcomes',
+    type: [String],
+    example: ['Build a full-stack app', 'Deploy with Docker'],
   })
-  @IsString()
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
-  learning_outcomes?: string;
+  learning_outcomes?: string[];
 
   @ApiPropertyOptional({
-    description: 'Course resources description',
-    type: 'string',
+    description: 'Resource descriptions',
+    type: [String],
   })
-  @IsString()
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
-  resources?: string;
+  resources?: string[];
 }
 
 export class UpdateCourseDto {
@@ -176,9 +176,7 @@ export class UpdateCourseDto {
   @IsOptional()
   description?: string;
 
-  @ApiPropertyOptional({
-    description: 'About the course (detailed description)',
-  })
+  @ApiPropertyOptional({ description: 'About the course (detailed description)' })
   @IsString()
   @IsOptional()
   about?: string;
@@ -213,12 +211,11 @@ export class UpdateCourseDto {
   total_hours?: number;
 
   @ApiPropertyOptional({
-    description: 'Course difficulty level',
-    enum: CourseLevel,
+    description: 'Course difficulty level (Beginner, Intermediate, Advanced)',
   })
-  @IsEnum(CourseLevel)
+  @IsString()
   @IsOptional()
-  level?: CourseLevel;
+  level?: string;
 
   @ApiPropertyOptional({ description: 'Category ID' })
   @IsUUID()
@@ -255,9 +252,7 @@ export class UpdateCourseDto {
   @IsOptional()
   format_types?: string[];
 
-  @ApiPropertyOptional({
-    description: 'Is flexible learning enabled',
-  })
+  @ApiPropertyOptional({ description: 'Is flexible learning enabled' })
   @IsBoolean()
   @IsOptional()
   is_flexible_learning?: boolean;
@@ -283,19 +278,23 @@ export class UpdateCourseDto {
 
   @ApiPropertyOptional({
     description: 'Learning outcomes of the course',
-    type: 'string',
+    type: [String],
+    example: ['Understand async JS', 'Deploy apps'],
   })
-  @IsString()
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
-  learning_outcomes?: string;
+  learning_outcomes?: string[];
 
   @ApiPropertyOptional({
     description: 'Course resources description',
-    type: 'string',
+    type: [String],
+    example: ['PDFs', 'Slides', 'Templates'],
   })
-  @IsString()
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
-  resources?: string;
+  resources?: string[];
 }
 
 export class CourseFilterDto extends PaginationValidator {

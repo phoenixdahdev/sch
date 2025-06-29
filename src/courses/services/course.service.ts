@@ -45,9 +45,49 @@ export class CoursesService {
     return buildResponse({ course }, 'Course retrived successfully');
   }
   async create(createCourseDto: CreateCourseDto, userId: string) {
+    const {
+      resources,
+      skills,
+      learning_outcomes,
+      format_types,
+      preview_video_url,
+      about,
+      thumbnail_url,
+      ...restDto
+    } = createCourseDto;
+    const generatedResources: string[] = [];
+
+    if (!resources || resources.length === 0) {
+      if (format_types?.includes('video')) {
+        generatedResources.push('Video content available');
+      }
+      if (format_types?.includes('pdf')) {
+        generatedResources.push('PDF materials available');
+      }
+      if (format_types?.includes('text')) {
+        generatedResources.push('Text-based content available');
+      }
+      if (preview_video_url) {
+        generatedResources.push('Preview video included');
+      }
+      if (about) {
+        generatedResources.push('Course overview provided');
+      }
+      if (thumbnail_url) {
+        generatedResources.push('Course thumbnail included');
+      }
+      if (skills?.length) {
+        generatedResources.push('Skill-building content included');
+      }
+      if (learning_outcomes?.length) {
+        generatedResources.push('Learning objectives outlined');
+      }
+    }
+
     const course = await this.courseModelAction.create({
       createPayload: {
-        ...createCourseDto,
+        ...restDto,
+        resources: resources?.length ? resources : generatedResources,
         creator_id: userId,
         is_published: false,
       },
@@ -58,6 +98,7 @@ export class CoursesService {
 
     return buildResponse({ course }, 'Course created successfully');
   }
+
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
     await this.findOne(id);
@@ -101,7 +142,6 @@ export class CoursesService {
   ) {
     const { filterRecordOptions, paginationPayload, order } = options;
 
-    // Create OR conditions
     const searchConditions = [
       {
         ...filterRecordOptions,

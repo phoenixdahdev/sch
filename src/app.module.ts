@@ -68,7 +68,7 @@ export class AppModule implements OnModuleInit {
     @InjectDataSource(dbNames.USER) private readonly userDb: DataSource,
     @InjectDataSource(dbNames.COURSE)
     private readonly coursesDb: DataSource,
-  ) {}
+  ) { }
 
   onModuleInit() {
     this.logger.log(`✅ USER_DB initialized: ${this.userDb.isInitialized}`);
